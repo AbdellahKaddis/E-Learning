@@ -100,5 +100,12 @@ namespace Ecommerce.DAL.Repositories
 
             return isExist;
         }
+
+        public bool IsRoleExists(int id)
+        {
+            var isExist = _context.Roles.Any(r => r.Id == id);
+
+            return isExist;
+        }
     }
 }

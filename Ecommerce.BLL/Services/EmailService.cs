@@ -30,6 +30,9 @@ namespace Ecommerce.BLL.Services
             email.Body = new TextPart(isBodyHtml ? "html" : "plain") { Text = body };
 
             using var smtp = new SmtpClient();
+            //  Add this line to ignore certificate validation for local not production
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+
             smtp.Connect(_configuration["Smtp:Host"], int.Parse(_configuration["Smtp:Port"]), MailKit.Security.SecureSocketOptions.StartTls);
             smtp.Authenticate(_configuration["Smtp:Username"], _configuration["Smtp:Password"]);
             smtp.Send(email);

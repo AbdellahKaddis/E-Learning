@@ -46,5 +46,7 @@ namespace Ecommerce.BLL.Services
         {
             return DateTime.TryParse(dateString, out _);
         }
+
+        public bool IsRoleExists(int id) => _repo.IsRoleExists(id);
     }
 }

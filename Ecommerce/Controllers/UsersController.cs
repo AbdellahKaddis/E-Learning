@@ -82,7 +82,7 @@ namespace Ecommerce.Api.Controllers
                 return BadRequest(new { error = "Email already exists." });
 
             string subject = "Welcome to BitBot Enterprise!";
-            string logoUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.designcrowd.com%2Fdesign%2F1904994&psig=AOvVaw2arplkXLNI3xkcZL__l-5D&ust=1744631978889000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCktuL61IwDFQAAAAAdAAAAABAE"; // Replace with your actual logo URL
+            string logoUrl = "https://media.licdn.com/dms/image/v2/D4E0BAQECyxvCN8jp4g/company-logo_200_200/company-logo_200_200/0/1694042546764?e=2147483647&v=beta&t=uk1KuO6iW7H56R3CkskERdIHWEqAjFyxwmlZ5_icOWk"; // Replace with your actual logo URL
 
             string body = $@"
                         <!DOCTYPE html>

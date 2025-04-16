@@ -7,7 +7,7 @@ using System.Text;
 using Ecommerce.BLL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
+//ddd
 // Get the connection string from appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ecommerce.BLL.Services;
+using Ecommerce.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,6 +52,11 @@ builder.Services.AddScoped<EmailService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<CategoryRepositories>();
+builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<CourseRepository>();
+builder.Services.AddScoped<CourseService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

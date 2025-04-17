@@ -21,6 +21,7 @@ namespace Ecommerce.Models.Entities
         public string Password { get; set; }
 
         public int RoleId { get; set; }
+        public List<Course>? Course { get; set; }
 
         public Role Role { get; set; }
     }

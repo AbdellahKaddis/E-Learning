@@ -1,10 +1,6 @@
 ﻿using Ecommerce.DAL.Repositories;
 using Ecommerce.Models.DTOs;
-using Ecommerce.Models.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Ecommerce.BLL.Services
@@ -18,25 +14,22 @@ namespace Ecommerce.BLL.Services
             _repo = repo;
         }
 
-        public List<RoleDTO> GetAllRoles() => _repo.GetAllRoles();
+        public async Task<List<RoleDTO>> GetAllRolesAsync() => await _repo.GetAllRolesAsync();
 
-        public RoleDTO GetRoleById(int id) => _repo.GetRoleById(id);
+        public async Task<RoleDTO> GetRoleByIdAsync(int id) => await _repo.GetRoleByIdAsync(id);
 
-        public RoleDTO AddRole(RoleDTO newRole)
+        public async Task<RoleDTO> AddRoleAsync(RoleDTO newRole)
         {
-            newRole.Id = _repo.AddRole(newRole);
+            newRole.Id = await _repo.AddRoleAsync(newRole);
             return newRole;
         }
 
-        public RoleDTO UpdateRole(RoleDTO updatedRole)
+        public async Task<RoleDTO> UpdateRoleAsync(RoleDTO updatedRole)
         {
-            var updated = _repo.UpdateRole(updatedRole);
+            var updated = await _repo.UpdateRoleAsync(updatedRole);
             return updated ? updatedRole : null;
         }
 
-        public bool DeleteRole(int id) => _repo.DeleteRole(id);
-
-        
-
+        public async Task<bool> DeleteRoleAsync(int id) => await _repo.DeleteRoleAsync(id);
     }
 }

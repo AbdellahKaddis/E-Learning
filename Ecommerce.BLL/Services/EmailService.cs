@@ -1,4 +1,5 @@
 ﻿using MailKit.Net.Smtp;
+using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 using System;
@@ -19,24 +20,29 @@ namespace Ecommerce.BLL.Services
             _configuration = configuration;
         }
 
-        public void SendEmail(string toEmail, string subject, string body, bool isBodyHtml = false)
+        public async Task SendEmailAsync(string toEmail, string subject, string body, bool isBodyHtml = false)
         {
             var email = new MimeMessage();
             email.From.Add(MailboxAddress.Parse(_configuration["Smtp:Username"]));
             email.To.Add(MailboxAddress.Parse(toEmail));
             email.Subject = subject;
 
-            // Set body as HTML if isBodyHtml is true, otherwise plain text
             email.Body = new TextPart(isBodyHtml ? "html" : "plain") { Text = body };
 
             using var smtp = new SmtpClient();
-            //  Add this line to ignore certificate validation for local not production
-            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true; // Ignore certs in dev
 
-            smtp.Connect(_configuration["Smtp:Host"], int.Parse(_configuration["Smtp:Port"]), MailKit.Security.SecureSocketOptions.StartTls);
-            smtp.Authenticate(_configuration["Smtp:Username"], _configuration["Smtp:Password"]);
-            smtp.Send(email);
-            smtp.Disconnect(true);
+            await smtp.ConnectAsync(
+                _configuration["Smtp:Host"],
+                int.Parse(_configuration["Smtp:Port"]),
+                SecureSocketOptions.StartTls);
+
+            await smtp.AuthenticateAsync(
+                _configuration["Smtp:Username"],
+                _configuration["Smtp:Password"]);
+
+            await smtp.SendAsync(email);
+            await smtp.DisconnectAsync(true);
         }
 
         public static bool IsValidEmail(string email)

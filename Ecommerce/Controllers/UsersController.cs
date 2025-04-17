@@ -55,23 +55,32 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserCreatedDTO>> AddUser(UserDTO dto) 
         {
+
             if (string.IsNullOrWhiteSpace(dto.DateOfBirth.ToString()))
                 return BadRequest(new { error = "DateOfBirth is required." });
 
             if (!UserService.IsValidDate(dto.DateOfBirth.ToString()))
                 return BadRequest(new { error = "Invalid Date Format." });
 
+
             if (!EmailService.IsValidEmail(dto.Email))
+
                 return BadRequest(new { error = "Invalid Email Format." });
 
             if (await _service.IsEmailExistsAsync(dto.Email)) 
                 return BadRequest(new { error = "Email already exists." });
+
 
             if (!await _service.IsRoleExistsAsync(dto.RoleId)) 
                 return BadRequest(new { error = $"RoleId {dto.RoleId} does not exist." });
 
             string subject = "Welcome to BitBot Enterprise!";
             string logoUrl = "https://media.licdn.com/...";
+
+         
+            string subject = "Welcome to BitBot Enterprise!";
+            string logoUrl = "https://media.licdn.com/dms/image/v2/D4E0BAQECyxvCN8jp4g/company-logo_200_200/company-logo_200_200/0/1694042546764?e=2147483647&v=beta&t=uk1KuO6iW7H56R3CkskERdIHWEqAjFyxwmlZ5_icOWk"; // Replace with your actual logo URL
+
 
             string body = $@"
                         <!DOCTYPE html>
@@ -179,6 +188,16 @@ namespace Ecommerce.Api.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
+        }
+
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteUser(int id)
+        {
+            var success = _service.DeleteUser(id);
+            return success ? Ok() : NotFound("deleted successfully");
         }
     }
 }

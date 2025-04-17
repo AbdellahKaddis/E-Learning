@@ -1,10 +1,9 @@
 ﻿using Ecommerce.DAL.Db;
 using Ecommerce.Models.DTOs;
 using Ecommerce.Models.Entities;
-using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Ecommerce.DAL.Repositories
@@ -18,44 +17,46 @@ namespace Ecommerce.DAL.Repositories
             _context = context;
         }
 
-        public List<RoleDTO> GetAllRoles()
+        public async Task<List<RoleDTO>> GetAllRolesAsync()
         {
-            return _context.Roles.Select(r => new RoleDTO { Id=r.Id, RoleName = r.RoleName}).ToList();
+            return await _context.Roles
+                .Select(r => new RoleDTO { Id = r.Id, RoleName = r.RoleName })
+                .ToListAsync();
         }
 
-        public RoleDTO GetRoleById(int id)
+        public async Task<RoleDTO> GetRoleByIdAsync(int id)
         {
-            return _context.Roles.Select(r => new RoleDTO { Id = r.Id, RoleName = r.RoleName }).FirstOrDefault(r => r.Id == id);
+            return await _context.Roles
+                .Select(r => new RoleDTO { Id = r.Id, RoleName = r.RoleName })
+                .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public int AddRole(RoleDTO newRole)
+        public async Task<int> AddRoleAsync(RoleDTO newRole)
         {
-            var role = new Role { RoleName = newRole.RoleName};
+            var role = new Role { RoleName = newRole.RoleName };
             _context.Roles.Add(role);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return role.Id;
         }
 
-        public bool UpdateRole(RoleDTO updatedRole)
+        public async Task<bool> UpdateRoleAsync(RoleDTO updatedRole)
         {
-            var role = _context.Roles.Find(updatedRole.Id);
+            var role = await _context.Roles.FindAsync(updatedRole.Id);
             if (role == null) return false;
 
             role.RoleName = updatedRole.RoleName;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public bool DeleteRole(int id)
+        public async Task<bool> DeleteRoleAsync(int id)
         {
-            var role = _context.Roles.Find(id);
-            if (role is null) return false;
+            var role = await _context.Roles.FindAsync(id);
+            if (role == null) return false;
 
             _context.Roles.Remove(role);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-
-
     }
 }

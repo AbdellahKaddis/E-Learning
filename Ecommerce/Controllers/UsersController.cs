@@ -1,4 +1,11 @@
-﻿using Ecommerce.BLL.Services;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using Ecommerce.BLL.Services;
 using Ecommerce.DAL.Db;
 using Ecommerce.DAL.Repositories;
 using Ecommerce.Models.DTOs;
@@ -6,9 +13,6 @@ using Ecommerce.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -16,59 +20,58 @@ namespace Ecommerce.Api.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-
         private readonly UserService _service;
         private readonly EmailService _emailService;
         private readonly IConfiguration _configuration;
-        public UsersController(AppDbContext context, EmailService emailService, IConfiguration configuration)
+
+        public UsersController(UserService service, EmailService emailService, IConfiguration configuration)
         {
-            var repo = new UserRepository(context);
-            _service = new UserService(repo);
+            _service = service;
             _emailService = emailService;
             _configuration = configuration;
         }
 
-        [HttpGet()]
+
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<IEnumerable<User>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserCreatedDTO>>> GetAllUsers() 
         {
-            var users = _service.GetAllUsers();
+            var users = await _service.GetAllUsersAsync(); 
             return users.Any() ? Ok(users) : NotFound("No Users Found.");
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<UserDTO> GetUserById(int id)
+        public async Task<ActionResult<UserCreatedDTO>> GetUserById(int id) 
         {
-            var user = _service.GetUserById(id);
+            var user = await _service.GetUserByIdAsync(id); 
             return user == null ? NotFound() : Ok(user);
         }
 
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<UserDTO> AddUser(UserDTO dto)
+        public async Task<ActionResult<UserCreatedDTO>> AddUser(UserDTO dto) 
         {
-
             if (string.IsNullOrWhiteSpace(dto.DateOfBirth.ToString()))
                 return BadRequest(new { error = "DateOfBirth is required." });
 
             if (!UserService.IsValidDate(dto.DateOfBirth.ToString()))
                 return BadRequest(new { error = "Invalid Date Format." });
 
-            if(!EmailService.IsValidEmail(dto.Email))
+            if (!EmailService.IsValidEmail(dto.Email))
                 return BadRequest(new { error = "Invalid Email Format." });
 
-            if (_service.IsEmailExists(dto.Email))
+            if (await _service.IsEmailExistsAsync(dto.Email)) 
                 return BadRequest(new { error = "Email already exists." });
 
-            if(!_service.IsRoleExists(dto.RoleId))
-                return BadRequest(new { error = $"RoleId {dto.RoleId} does not exists." });
+            if (!await _service.IsRoleExistsAsync(dto.RoleId)) 
+                return BadRequest(new { error = $"RoleId {dto.RoleId} does not exist." });
 
             string subject = "Welcome to BitBot Enterprise!";
-            string logoUrl = "https://media.licdn.com/dms/image/v2/D4E0BAQECyxvCN8jp4g/company-logo_200_200/company-logo_200_200/0/1694042546764?e=2147483647&v=beta&t=uk1KuO6iW7H56R3CkskERdIHWEqAjFyxwmlZ5_icOWk"; // Replace with your actual logo URL
+            string logoUrl = "https://media.licdn.com/...";
 
             string body = $@"
                         <!DOCTYPE html>
@@ -109,10 +112,9 @@ namespace Ecommerce.Api.Controllers
                         </body>
                         </html>";
 
-            // No need for Replace since we're directly embedding the name and logoUrl
-            _emailService.SendEmail(dto.Email, subject, body, isBodyHtml: true);
+            await _emailService.SendEmailAsync(dto.Email, subject, body, isBodyHtml: true); 
 
-            var created = _service.AddUser(dto);
+            var created = await _service.AddUserAsync(dto); 
             return CreatedAtAction(nameof(GetUserById), new { id = created.Id }, created);
         }
 
@@ -120,7 +122,7 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<string> Login(string Email,string Password)
+        public async Task<ActionResult<string>> Login(string Email, string Password) 
         {
             if (string.IsNullOrWhiteSpace(Email))
                 return BadRequest(new { error = "Email is required." });
@@ -131,22 +133,35 @@ namespace Ecommerce.Api.Controllers
             if (string.IsNullOrWhiteSpace(Password))
                 return BadRequest(new { error = "Password is required." });
 
-            var user = _service.GetUserByEmail(Email);
-            if (user == null)
-            {
-                return NotFound("Email not found");
-            }
+            var user = await _service.GetUserByEmailAsync(Email); 
+            if (user == null) return NotFound("Email not found");
 
             if (!BCrypt.Net.BCrypt.Verify(Password, user.Password))
-            {
                 return BadRequest("Incorrect password");
-            }
 
             var token = GenerateJwtToken(user);
             return Ok(new { token });
         }
 
-        private string GenerateJwtToken(UserDTO user)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UserCreatedDTO>> UpdateUser(int id, UserDTO dto) 
+        {
+            if (id != dto.Id) return BadRequest("ID mismatch");
+            var updated = await _service.UpdateUserAsync(dto); 
+            return updated == null ? NotFound() : Ok(updated);
+        }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteUser(int id) 
+        {
+            var success = await _service.DeleteUserAsync(id); 
+            return success ? Ok("Deleted successfully") : NotFound("No user found.");
+        }
+
+        
+        private string GenerateJwtToken(User user)
         {
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -154,7 +169,8 @@ namespace Ecommerce.Api.Controllers
                 Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email)
+                    new Claim(ClaimTypes.Email, user.Email),
+                     new Claim(ClaimTypes.Role, user.Role.RoleName),
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -163,24 +179,6 @@ namespace Ecommerce.Api.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-        }
-
-        //[HttpPut("{id}")]
-        //public ActionResult<BookDTO> UpdateBook(int id, BookDTO dto)
-        //{
-        //    if (id != dto.Id) return BadRequest("ID mismatch");
-
-        //    var updated = _service.UpdateBook(dto);
-        //    return updated == null ? NotFound() : Ok(updated);
-        //}
-
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult DeleteUser(int id)
-        {
-            var success = _service.DeleteUser(id);
-            return success ? Ok() : NotFound("deleted successfully");
         }
     }
 }

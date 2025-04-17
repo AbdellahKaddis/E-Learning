@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ecommerce.BLL.Services;
+using Ecommerce.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,7 +33,15 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<EmailService>();
+
+builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<RoleService>();
+
+
 
 //// Configure CORS
 //builder.Services.AddCors(options =>

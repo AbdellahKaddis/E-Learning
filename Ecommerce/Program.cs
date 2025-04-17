@@ -33,21 +33,29 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<EmailService>();
 
-//// Configure CORS
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowFrontend",
-//        policy =>
-//        {
-//            policy.WithOrigins("http://localhost:4200")
-//                  .AllowAnyHeader()
-//                  .AllowAnyMethod();
-//        });
-//});
+builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<RoleService>();
 
-//app.UseCors("AllowFrontend");
+
+
+//// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
 
 
 builder.Services.AddControllers();
@@ -61,6 +69,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -8,7 +8,10 @@ namespace Ecommerce.Models.Entities
 {
     public class User
     {
+
+        //test
         //
+
         public int Id { get; set; }
 
         public string FirstName { get; set; }
@@ -21,6 +24,7 @@ namespace Ecommerce.Models.Entities
         public string Password { get; set; }
 
         public int RoleId { get; set; }
+        public List<Course>? Course { get; set; }
 
         public Role Role { get; set; }
     }

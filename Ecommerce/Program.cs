@@ -33,29 +33,52 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+
+builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<EmailService>();
+
+builder.Services.AddScoped<RoleRepository>();
+builder.Services.AddScoped<RoleService>();
+
+
+
+//// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
+
+
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<CategoryRepositories>();
+builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<CourseRepository>();
+builder.Services.AddScoped<CourseService>();
+
+
 builder.Services.AddScoped<LessonRepository>();
 builder.Services.AddScoped<LessonService>();
-//// Configure CORS
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowFrontend",
-//        policy =>
-//        {
-//            policy.WithOrigins("http://localhost:4200")
-//.AllowAnyHeader()
-//                  .AllowAnyMethod();
-//        });
-//});
 
-//app.UseCors("AllowFrontend");
 
 
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNameCaseInsensitive = true);// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors("AllowFrontend");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

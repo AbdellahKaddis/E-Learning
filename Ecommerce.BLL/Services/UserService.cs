@@ -1,10 +1,7 @@
 ﻿using Ecommerce.DAL.Repositories;
 using Ecommerce.Models.DTOs;
 using Ecommerce.Models.Entities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Ecommerce.BLL.Services
@@ -18,33 +15,56 @@ namespace Ecommerce.BLL.Services
             _repo = repo;
         }
 
-        public List<UserDTO> GetAllUsers() => _repo.GetAllUsers();
+        public async Task<List<UserCreatedDTO>> GetAllUsersAsync() => await _repo.GetAllUsersAsync(); 
 
-        public UserDTO GetUserById(int id) => _repo.GetUserById(id);
+        public async Task<UserCreatedDTO> GetUserByIdAsync(int id) => await _repo.GetUserByIdAsync(id); 
 
-        public UserDTO GetUserByEmail(string Email) => _repo.GetUserByEmail(Email);
+        public async Task<User> GetUserByEmailAsync(string Email) => await _repo.GetUserByEmailAsync(Email); 
 
-
-        public UserDTO AddUser(UserDTO dto)
+        public async Task<UserCreatedDTO> AddUserAsync(UserDTO dto) 
         {
             dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-            dto.Id = _repo.AddUser(dto);
-            return dto;
+            dto.Id = await _repo.AddUserAsync(dto); 
+            var createdUser = await _repo.GetUserByEmailAsync(dto.Email); 
+            return new UserCreatedDTO
+            {
+                Id = dto.Id,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                DateOfBirth = dto.DateOfBirth,
+                Email = dto.Email,
+                RoleId = dto.RoleId,
+                RoleName = createdUser.Role.RoleName
+            };
         }
 
-        //public AuthorDTO UpdateAuthor(AuthorDTO dto)
-        //{
-        //    var updated = _repo.UpdateAuthor(dto);
-        //    return updated ? dto : null;
-        //}
+        public async Task<UserCreatedDTO> UpdateUserAsync(UserDTO dto) 
+        {
+            var updated = await _repo.UpdateUserAsync(dto); 
+            if (!updated) return null;
 
-        public bool DeleteUser(int id) => _repo.DeleteUser(id);
+            var updatedUser = await _repo.GetUserByEmailAsync(dto.Email); 
+            return new UserCreatedDTO
+            {
+                Id = dto.Id,
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                DateOfBirth = dto.DateOfBirth,
+                Email = dto.Email,
+                RoleId = dto.RoleId,
+                RoleName = updatedUser.Role.RoleName
+            };
+        }
 
-        public bool IsEmailExists(string email) => _repo.IsEmailExists(email);
+        public async Task<bool> DeleteUserAsync(int id) => await _repo.DeleteUserAsync(id); 
+
+        public async Task<bool> IsEmailExistsAsync(string email) => await _repo.IsEmailExistsAsync(email); 
 
         public static bool IsValidDate(string dateString)
         {
             return DateTime.TryParse(dateString, out _);
         }
+
+        public async Task<bool> IsRoleExistsAsync(int id) => await _repo.IsRoleExistsAsync(id); 
     }
 }

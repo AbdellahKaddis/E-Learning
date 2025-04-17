@@ -3,13 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Api", "Ecommerce.Api.csproj", "{296B323C-F642-4577-A0CB-CC7D8CC56A89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Api", "Ecommerce.Api.csproj", "{296B323C-F642-4577-A0CB-CC7D8CC56A89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.BLL", "..\Ecommerce.BLL\Ecommerce.BLL.csproj", "{B231755F-85E3-4967-B97A-08E03F587033}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.BLL", "..\Ecommerce.BLL\Ecommerce.BLL.csproj", "{B231755F-85E3-4967-B97A-08E03F587033}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.DAL", "..\Ecommerce.DAL\Ecommerce.DAL.csproj", "{558C874E-74D8-44F7-8FAA-05CDA3C91B2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.DAL", "..\Ecommerce.DAL\Ecommerce.DAL.csproj", "{558C874E-74D8-44F7-8FAA-05CDA3C91B2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Models", "..\Ecommerce.Models\Ecommerce.Models.csproj", "{D7B9EACB-5800-4538-A369-902F42419A2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ecommerce.Models", "..\Ecommerce.Models\Ecommerce.Models.csproj", "{D7B9EACB-5800-4538-A369-902F42419A2B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8258CEFB-C7F5-4B7D-A7D2-1D2797BF343A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

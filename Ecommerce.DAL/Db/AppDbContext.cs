@@ -12,7 +12,10 @@ namespace Ecommerce.DAL.Db
         public DbSet<User> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Course> Courses { get; set; }
         public DbSet<Lesson> Lesson { get; set; } 
+        feature/crudlesson
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
@@ -24,6 +27,12 @@ namespace Ecommerce.DAL.Db
             modelBuilder.Entity<Role>().HasData(new Role { Id = 1, RoleName = "admin" },
             new Role { Id = 2, RoleName = "instructor" }, new Role { Id = 3, RoleName = "parent" }, new Role { Id = 4, RoleName = "student" });
 
+            modelBuilder.Entity<Course>()
+       .Property(c => c.Created)
+       .HasDefaultValueSql("GETDATE()");
+            modelBuilder.Entity<Course>()
+       .Property(c => c.Updated)
+       .HasDefaultValueSql("GETDATE()");
 
         }
     }

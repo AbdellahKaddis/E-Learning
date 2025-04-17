@@ -51,14 +51,6 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<UserDTO> AddUser(UserDTO dto)
         {
-            if (dto == null)
-                return BadRequest(new { error = "Invalid user data." });
-
-            if (string.IsNullOrWhiteSpace(dto.FirstName))
-                return BadRequest(new { error = "FirstName is required." });
-
-            if (string.IsNullOrWhiteSpace(dto.LastName))
-                return BadRequest(new { error = "LastName is required." });
 
             if (string.IsNullOrWhiteSpace(dto.DateOfBirth.ToString()))
                 return BadRequest(new { error = "DateOfBirth is required." });
@@ -66,23 +58,15 @@ namespace Ecommerce.Api.Controllers
             if (!UserService.IsValidDate(dto.DateOfBirth.ToString()))
                 return BadRequest(new { error = "Invalid Date Format." });
 
-            if (string.IsNullOrWhiteSpace(dto.Email))
-                return BadRequest(new { error = "Email is required." });
-
-            if (string.IsNullOrWhiteSpace(dto.Password))
-                return BadRequest(new { error = "Password is required." });
-
-            if (string.IsNullOrWhiteSpace(dto.RoleId.ToString()))
-                return BadRequest(new { error = "RoleId is required." });
-
             if(!EmailService.IsValidEmail(dto.Email))
                 return BadRequest(new { error = "Invalid Email Format." });
 
             if (_service.IsEmailExists(dto.Email))
                 return BadRequest(new { error = "Email already exists." });
 
+         
             string subject = "Welcome to BitBot Enterprise!";
-            string logoUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.designcrowd.com%2Fdesign%2F1904994&psig=AOvVaw2arplkXLNI3xkcZL__l-5D&ust=1744631978889000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCktuL61IwDFQAAAAAdAAAAABAE"; // Replace with your actual logo URL
+            string logoUrl = "https://media.licdn.com/dms/image/v2/D4E0BAQECyxvCN8jp4g/company-logo_200_200/company-logo_200_200/0/1694042546764?e=2147483647&v=beta&t=uk1KuO6iW7H56R3CkskERdIHWEqAjFyxwmlZ5_icOWk"; // Replace with your actual logo URL
 
             string body = $@"
                         <!DOCTYPE html>
@@ -194,7 +178,7 @@ namespace Ecommerce.Api.Controllers
         public IActionResult DeleteUser(int id)
         {
             var success = _service.DeleteUser(id);
-            return success ? Ok() : NotFound();
+            return success ? Ok() : NotFound("deleted successfully");
         }
     }
 }

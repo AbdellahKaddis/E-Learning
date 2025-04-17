@@ -5,9 +5,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ecommerce.BLL.Services;
+using Ecommerce.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-//ddd
+
 // Get the connection string from appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -33,7 +34,8 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<EmailService>();
-
+builder.Services.AddScoped<LessonRepository>();
+builder.Services.AddScoped<LessonService>();
 //// Configure CORS
 //builder.Services.AddCors(options =>
 //{
@@ -41,7 +43,7 @@ builder.Services.AddScoped<EmailService>();
 //        policy =>
 //        {
 //            policy.WithOrigins("http://localhost:4200")
-//                  .AllowAnyHeader()
+//.AllowAnyHeader()
 //                  .AllowAnyMethod();
 //        });
 //});
@@ -49,8 +51,7 @@ builder.Services.AddScoped<EmailService>();
 //app.UseCors("AllowFrontend");
 
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNameCaseInsensitive = true);// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

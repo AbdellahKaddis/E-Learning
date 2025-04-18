@@ -8,7 +8,10 @@ namespace Ecommerce.Models.Entities
 {
     public class User
     {
+
         //test
+        //
+
         public int Id { get; set; }
 
         public string FirstName { get; set; }

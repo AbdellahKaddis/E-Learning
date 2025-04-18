@@ -13,16 +13,11 @@ namespace Ecommerce.BLL.Services
     {
 
         private readonly LessonRepository _repo;
-        private UserRepository repo;
+   
 
         public LessonService(LessonRepository repo)
         {
             _repo = repo;
-        }
-
-        public LessonService(UserRepository repo)
-        {
-            this.repo = repo;
         }
 
         public List<Lesson> GetAllLessons() => _repo.GetAllLessons();

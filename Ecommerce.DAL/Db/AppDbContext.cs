@@ -15,7 +15,7 @@ namespace Ecommerce.DAL.Db
         public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lesson> Lesson { get; set; } 
-        feature/crudlesson
+      
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {

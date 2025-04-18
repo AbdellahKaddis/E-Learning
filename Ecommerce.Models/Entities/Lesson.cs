@@ -13,7 +13,7 @@ namespace Ecommerce.Models.Entities
         public string titre { get; set; }
         public string? URL { get; set; }
         public TimeSpan Duration { get; set; }
-        public string course { get;set; }
-        public string courseId { get; set; } 
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
     }
 }

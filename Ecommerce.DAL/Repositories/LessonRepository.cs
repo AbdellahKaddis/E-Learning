@@ -33,8 +33,8 @@ namespace Ecommerce.DAL.Repositories
                 URL = l.URL,
                 Duration = l.Duration,
                 titre = l.titre,
-                course = l.course,
-                courseId = l.courseId
+  
+                CourseId = l.CourseId
             };
             _context.Lesson.Add(lesson);
             _context.SaveChanges();
@@ -51,8 +51,7 @@ namespace Ecommerce.DAL.Repositories
             lesson.titre = l.titre;
             lesson.URL = l.URL;
             lesson.Duration = l.Duration;
-            lesson.course = l.course;
-            lesson.courseId = l.courseId;
+            lesson.CourseId = l.CourseId;
 
             _context.SaveChanges();
             return lesson;

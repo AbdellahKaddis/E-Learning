@@ -74,8 +74,6 @@ namespace Ecommerce.Api.Controllers
             if (!await _service.IsRoleExistsAsync(dto.RoleId)) 
                 return BadRequest(new { error = $"RoleId {dto.RoleId} does not exist." });
 
-            string subject = "Welcome to BitBot Enterprise!";
-            string logoUrl = "https://media.licdn.com/...";
 
          
             string subject = "Welcome to BitBot Enterprise!";
@@ -191,13 +189,6 @@ namespace Ecommerce.Api.Controllers
         }
 
 
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult DeleteUser(int id)
-        {
-            var success = _service.DeleteUser(id);
-            return success ? Ok() : NotFound("deleted successfully");
-        }
+   
     }
 }

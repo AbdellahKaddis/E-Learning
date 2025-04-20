@@ -34,6 +34,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 
+
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<EmailService>();
@@ -65,8 +66,17 @@ builder.Services.AddCors(options =>
 
 
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddScoped<CategoryRepositories>();
+builder.Services.AddScoped<CategoryService>();
+builder.Services.AddScoped<CourseRepository>();
+builder.Services.AddScoped<CourseService>();
+
+
+
+
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNameCaseInsensitive = true);// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

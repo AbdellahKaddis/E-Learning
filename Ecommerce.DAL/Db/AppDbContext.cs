@@ -1,11 +1,10 @@
-﻿using Ecommerce.Models.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Ecommerce.Models.Entities;
 namespace Ecommerce.DAL.Db
 {
     public class AppDbContext : DbContext
@@ -14,9 +13,14 @@ namespace Ecommerce.DAL.Db
 
         public DbSet<Role> Roles { get; set; }
 
+
         public DbSet<Parent> Parents { get; set; }
 
         public DbSet<Student> Students { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Course> Courses { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
@@ -41,6 +45,16 @@ namespace Ecommerce.DAL.Db
             .WithOne(u => u.Student)
             .HasForeignKey<Student>(s => s.UserId)
             .OnDelete(DeleteBehavior.Restrict);
+           
+
+            modelBuilder.Entity<Course>()
+       .Property(c => c.Created)
+       .HasDefaultValueSql("GETDATE()");
+            modelBuilder.Entity<Course>()
+       .Property(c => c.Updated)
+       .HasDefaultValueSql("GETDATE()");
+
+
         }
     }
 }

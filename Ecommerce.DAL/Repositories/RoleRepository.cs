@@ -20,35 +20,36 @@ namespace Ecommerce.DAL.Repositories
         public async Task<List<RoleDTO>> GetAllRolesAsync()
         {
             return await _context.Roles
-                .Select(r => new RoleDTO { Id = r.Id, RoleName = r.RoleName })
+                .Select(r => new RoleDTO { Id = r.Id, Name = r.Name })
                 .ToListAsync();
         }
 
-        public async Task<RoleDTO> GetRoleByIdAsync(int id)
+        public async Task<RoleDTO?> GetRoleByIdAsync(int id)
         {
             return await _context.Roles
-                .Select(r => new RoleDTO { Id = r.Id, RoleName = r.RoleName })
+                .Select(r => new RoleDTO { Id = r.Id, Name = r.Name })
                 .FirstOrDefaultAsync(r => r.Id == id);
         }
 
-        public async Task<int> AddRoleAsync(RoleDTO newRole)
+        public async Task<int> AddRoleAsync(CreateRoleDTO newRole)
         {
-            var role = new Role { RoleName = newRole.RoleName };
+            var role = new Role { Name = newRole.Name };
             _context.Roles.Add(role);
             await _context.SaveChangesAsync();
             return role.Id;
         }
 
-        public async Task<bool> UpdateRoleAsync(RoleDTO updatedRole)
+        public async Task<bool> UpdateRoleAsync(UpdateRoleDTO updatedRole)
         {
             var role = await _context.Roles.FindAsync(updatedRole.Id);
             if (role == null) return false;
 
-            role.RoleName = updatedRole.RoleName;
+            if (!string.IsNullOrWhiteSpace(updatedRole.Name))
+                role.Name = updatedRole.Name;
+
             await _context.SaveChangesAsync();
             return true;
         }
-
         public async Task<bool> DeleteRoleAsync(int id)
         {
             var role = await _context.Roles.FindAsync(id);

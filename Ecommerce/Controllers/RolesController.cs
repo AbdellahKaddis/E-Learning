@@ -36,14 +36,14 @@ namespace Ecommerce.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<RoleDTO>> AddRole(RoleDTO newRole)
+        public async Task<ActionResult<RoleDTO>> AddRole(CreateRoleDTO newRole)
         {
             var created = await _service.AddRoleAsync(newRole);
             return CreatedAtAction(nameof(GetRoleById), new { id = created.Id }, created);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<RoleDTO>> UpdateRole(int id, RoleDTO updatedRole)
+        public async Task<ActionResult<RoleDTO>> UpdateRole(int id, UpdateRoleDTO updatedRole)
         {
             if (id != updatedRole.Id) return BadRequest("ID mismatch");
 

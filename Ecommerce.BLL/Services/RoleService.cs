@@ -16,18 +16,21 @@ namespace Ecommerce.BLL.Services
 
         public async Task<List<RoleDTO>> GetAllRolesAsync() => await _repo.GetAllRolesAsync();
 
-        public async Task<RoleDTO> GetRoleByIdAsync(int id) => await _repo.GetRoleByIdAsync(id);
+        public async Task<RoleDTO?> GetRoleByIdAsync(int id) => await _repo.GetRoleByIdAsync(id);
 
-        public async Task<RoleDTO> AddRoleAsync(RoleDTO newRole)
+        public async Task<RoleDTO> AddRoleAsync(CreateRoleDTO newRole)
         {
-            newRole.Id = await _repo.AddRoleAsync(newRole);
-            return newRole;
+            int InsertedId = await _repo.AddRoleAsync(newRole);
+            return new RoleDTO { Id = InsertedId, Name = newRole.Name};
         }
 
-        public async Task<RoleDTO> UpdateRoleAsync(RoleDTO updatedRole)
+        public async Task<RoleDTO?> UpdateRoleAsync(UpdateRoleDTO dto)
         {
-            var updated = await _repo.UpdateRoleAsync(updatedRole);
-            return updated ? updatedRole : null;
+            var updated = await _repo.UpdateRoleAsync(dto);
+            if (!updated) return null;
+
+            var updatedRole = await _repo.GetRoleByIdAsync(dto.Id);
+            return updated ? new RoleDTO { Id = updatedRole.Id, Name = updatedRole.Name } : null;
         }
 
         public async Task<bool> DeleteRoleAsync(int id) => await _repo.DeleteRoleAsync(id);

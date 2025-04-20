@@ -13,6 +13,10 @@ namespace Ecommerce.DAL.Db
         public DbSet<User> Users { get; set; }
 
         public DbSet<Role> Roles { get; set; }
+
+        public DbSet<Parent> Parents { get; set; }
+
+        public DbSet<Student> Students { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
@@ -21,8 +25,22 @@ namespace Ecommerce.DAL.Db
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Role>().HasMany(r => r.Users).WithOne(u => u.Role).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, RoleName = "admin" },
-            new Role { Id = 2, RoleName = "instructor" }, new Role { Id = 3, RoleName = "parent" }, new Role { Id = 4, RoleName = "student" });
+          
+            modelBuilder.Entity<Role>().HasData(new Role { Id = 1, Name = "admin" },
+            new Role { Id = 2, Name = "instructor" }, new Role { Id = 3, Name = "parent" }, new Role { Id = 4, Name = "student" });
+            modelBuilder.Entity<Parent>()
+            .HasOne(p => p.User)
+            .WithOne(u => u.Parent)
+            .HasForeignKey<Parent>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Parent>().HasMany(p => p.students).WithOne(s => s.Parent).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Student>()
+            .HasOne(s => s.User)
+            .WithOne(u => u.Student)
+            .HasForeignKey<Student>(s => s.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

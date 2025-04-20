@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.DTOs
 {
-    public class UserDTO
+    public class CreateUserWithStudentDTO
     {
-        public int Id { get; set; }
+        // User info
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; }
-        public string RoleName { get; set; }
+
+        // Student info
+        public DateOnly DateOfBirth { get; set; }
+        public int ParentId { get; set; }
     }
+
 }

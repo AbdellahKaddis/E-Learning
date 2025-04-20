@@ -41,6 +41,13 @@ builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<RoleRepository>();
 builder.Services.AddScoped<RoleService>();
 
+builder.Services.AddScoped<ParentService>();
+builder.Services.AddScoped<ParentRepository>();
+
+builder.Services.AddScoped<StudentService>();
+builder.Services.AddScoped<StudentRepository>();
+
+
 
 
 //// Configure CORS

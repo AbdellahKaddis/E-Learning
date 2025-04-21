@@ -61,6 +61,14 @@ namespace Ecommerce.Api.Controllers
 
             return Ok(new { message = "Course updated successfully" });
         }
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteCourse(int id)
+        {
+            var success = _service.DeleteCourse(id);
+            return success ? Ok(new { message = "course deleted successfully" }) : NotFound("No course Found.");
+        }
 
     }
 }

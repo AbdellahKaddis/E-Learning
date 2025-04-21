@@ -46,7 +46,7 @@ namespace Ecommerce.Api.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Lesson> UpdateLesson(int id, Lesson l)
+        public ActionResult<Lesson> UpdateLesson(int id, updateLessonDto l)
         {
             var lesson = _service.UpdateLesson(id, l);
             return lesson == null ? NotFound() : Ok(lesson);
@@ -55,7 +55,7 @@ namespace Ecommerce.Api.Controllers
         [HttpPost("AddLesson")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Lesson> AddLesson([FromBody] LessonDto dto)
+        public ActionResult<Lesson> AddLesson([FromBody] createLessonDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

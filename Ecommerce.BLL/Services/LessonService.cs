@@ -20,11 +20,11 @@ namespace Ecommerce.BLL.Services
             _repo = repo;
         }
 
-        public List<Lesson> GetAllLessons() => _repo.GetAllLessons();
+        public List<LessonDto> GetAllLessons() => _repo.GetAllLessons();
         public Lesson GetLessonId(int id) => _repo.GetLessonId(id);
-        public Lesson AddLesson(LessonDto dto) => _repo.AddLesson(dto);
+        public Lesson AddLesson(createLessonDto dto) => _repo.AddLesson(dto);
 
         public bool DeleteLesson(int id) => _repo.DeleteLesson(id);
-        public Lesson UpdateLesson(int id, Lesson l) => _repo.UpdateLesson(id, l);
+        public Lesson UpdateLesson(int id, updateLessonDto l) => _repo.UpdateLesson(id, l);
     }
 }

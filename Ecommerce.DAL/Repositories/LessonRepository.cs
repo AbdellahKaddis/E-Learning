@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ecommerce.DAL.Db;
 using Ecommerce.Models.DTOs;
 using Ecommerce.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.DAL.Repositories
 {
@@ -18,16 +19,29 @@ namespace Ecommerce.DAL.Repositories
             _context = context;
         }
 
-        public List<Lesson> GetAllLessons()
+        public List<LessonDto> GetAllLessons()
         {
-            return _context.Lesson.ToList();
+     
+            return _context.Lesson
+                .Include(c => c.Course)
+                .Select(lesson => new LessonDto
+                {
+                    LessonId = lesson.LessonId,
+                    titre = lesson.titre,
+                    URL = lesson.URL,
+                    Duration = lesson.Duration,
+                    CourseName = lesson.Course.CourseName,
+                  
+                })
+                .ToList();
         }
+        
         public Lesson GetLessonId(int id)
         {
             return _context.Lesson.FirstOrDefault(u => u.LessonId == id);
         }
 
-        public Lesson AddLesson(LessonDto dto)
+        public Lesson AddLesson(createLessonDto dto)
         {
             var lesson = new Lesson
             {
@@ -42,7 +56,7 @@ namespace Ecommerce.DAL.Repositories
             return lesson;
         }
 
-        public Lesson UpdateLesson(int id, Lesson l)
+        public Lesson UpdateLesson(int id, updateLessonDto l)
         {
             var lesson = _context.Lesson.FirstOrDefault(les => les.LessonId == id);
             if (lesson == null)

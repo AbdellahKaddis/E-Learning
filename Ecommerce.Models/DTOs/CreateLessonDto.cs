@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.DTOs
 {
-    public class LessonDto
+    public class createLessonDto
     {
-        public int LessonId { get; set; }
+
         public string titre { get; set; }
         public string? URL { get; set; }
         public TimeSpan Duration { get; set; }
-        public string CourseName { get; set; }
+        public int CourseId { get; set; }
     }
 }

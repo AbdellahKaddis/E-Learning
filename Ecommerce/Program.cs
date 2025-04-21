@@ -48,7 +48,8 @@ builder.Services.AddScoped<ParentRepository>();
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<StudentRepository>();
 
-
+builder.Services.AddScoped<LocationService>();
+builder.Services.AddScoped<LocationRepository>();
 
 
 //// Configure CORS

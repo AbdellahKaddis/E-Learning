@@ -21,6 +21,8 @@ namespace Ecommerce.DAL.Db
         public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }
 
+        public DbSet<Location> Locations { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
@@ -53,6 +55,10 @@ namespace Ecommerce.DAL.Db
             modelBuilder.Entity<Course>()
        .Property(c => c.Updated)
        .HasDefaultValueSql("GETDATE()");
+
+       modelBuilder.Entity<Location>()
+        .HasIndex(l => l.Name)
+        .IsUnique();
 
 
         }

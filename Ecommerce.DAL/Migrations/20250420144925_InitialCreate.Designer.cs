@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250417131820_AddCourseAndCategoryTable")]
-    partial class AddCourseAndCategoryTable
+    [Migration("20250420144925_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -98,6 +98,29 @@ namespace Ecommerce.DAL.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("Ecommerce.Models.Entities.Parent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Parents");
+                });
+
             modelBuilder.Entity("Ecommerce.Models.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -106,7 +129,7 @@ namespace Ecommerce.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("RoleName")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -118,23 +141,50 @@ namespace Ecommerce.DAL.Migrations
                         new
                         {
                             Id = 1,
-                            RoleName = "admin"
+                            Name = "admin"
                         },
                         new
                         {
                             Id = 2,
-                            RoleName = "instructor"
+                            Name = "instructor"
                         },
                         new
                         {
                             Id = 3,
-                            RoleName = "parent"
+                            Name = "parent"
                         },
                         new
                         {
                             Id = 4,
-                            RoleName = "student"
+                            Name = "student"
                         });
+                });
+
+            modelBuilder.Entity("Ecommerce.Models.Entities.Student", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Ecommerce.Models.Entities.User", b =>
@@ -144,9 +194,6 @@ namespace Ecommerce.DAL.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -193,6 +240,36 @@ namespace Ecommerce.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Ecommerce.Models.Entities.Parent", b =>
+                {
+                    b.HasOne("Ecommerce.Models.Entities.User", "User")
+                        .WithOne("Parent")
+                        .HasForeignKey("Ecommerce.Models.Entities.Parent", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Ecommerce.Models.Entities.Student", b =>
+                {
+                    b.HasOne("Ecommerce.Models.Entities.Parent", "Parent")
+                        .WithMany("students")
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Ecommerce.Models.Entities.User", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("Ecommerce.Models.Entities.Student", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Ecommerce.Models.Entities.User", b =>
                 {
                     b.HasOne("Ecommerce.Models.Entities.Role", "Role")
@@ -209,6 +286,11 @@ namespace Ecommerce.DAL.Migrations
                     b.Navigation("Course");
                 });
 
+            modelBuilder.Entity("Ecommerce.Models.Entities.Parent", b =>
+                {
+                    b.Navigation("students");
+                });
+
             modelBuilder.Entity("Ecommerce.Models.Entities.Role", b =>
                 {
                     b.Navigation("Users");
@@ -217,6 +299,12 @@ namespace Ecommerce.DAL.Migrations
             modelBuilder.Entity("Ecommerce.Models.Entities.User", b =>
                 {
                     b.Navigation("Course");
+
+                    b.Navigation("Parent")
+                        .IsRequired();
+
+                    b.Navigation("Student")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -17,6 +17,7 @@ namespace Ecommerce.DAL.Db
         public DbSet<Parent> Parents { get; set; }
 
         public DbSet<Student> Students { get; set; }
+        public DbSet<Lesson> Lesson { get; set; }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }

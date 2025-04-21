@@ -98,6 +98,15 @@ namespace Ecommerce.DAL.Repositories
             _context.SaveChanges();
             return true;
         }
+        public bool DeleteCourse(int id)
+        {
+            var course = _context.Courses.Find(id);
+            if (course == null) return false;
+
+            _context.Courses.Remove(course);
+            _context.SaveChanges();
+            return true;
+        }
 
     }
 }

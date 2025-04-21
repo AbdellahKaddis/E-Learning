@@ -21,6 +21,7 @@ namespace Ecommerce.DAL.Db
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Classe> Classes { get; set; }
 
         public DbSet<Location> Locations { get; set; }
 

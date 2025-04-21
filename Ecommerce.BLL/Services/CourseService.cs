@@ -24,6 +24,8 @@ namespace Ecommerce.BLL.Services
 
         public List<CourseDTO> GetAllCourses() => _repo.GetAllCourses();
         public CourseDTO GetCourseById(int id) => _repo.GetCourseById(id);
+        public bool DeleteCourse(int id) => _repo.DeleteCourse(id);
+
         public bool UpdateCourse(int id, UpdateCourseDTO dto)
         {
             return _repo.UpdateCourse(id, dto);

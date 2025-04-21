@@ -43,7 +43,7 @@ namespace Ecommerce.Api.Controllers
         public IActionResult DeleteCategory(int id)
         {
             var success = _service.DeleteCategory(id);
-            return success ? Ok() : NotFound();
+            return success ? Ok(new { message = "Category deleted successfully" }) : NotFound("No categories Found.");
         }
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

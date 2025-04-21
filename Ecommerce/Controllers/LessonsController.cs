@@ -55,11 +55,15 @@ namespace Ecommerce.Api.Controllers
         [HttpPost("AddLesson")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Lesson> AddLesson(Lesson lesson)
+        public ActionResult<Lesson> AddLesson([FromBody] LessonDto dto)
         {
-            var lessonAdded = _service.AddLesson(lesson);
-            return Ok(lessonAdded);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var lessonAdded = _service.AddLesson(dto);
+            return CreatedAtAction(nameof(AddLesson), new { id = lessonAdded.LessonId }, lessonAdded);
         }
+
 
         [HttpDelete("DeleteLesson")]
         [ProducesResponseType(StatusCodes.Status201Created)]

@@ -26,20 +26,22 @@ namespace Ecommerce.DAL.Repositories
         {
             return _context.Lesson.FirstOrDefault(u => u.LessonId == id);
         }
-        public Lesson AddLesson(Lesson l)
+
+        public Lesson AddLesson(LessonDto dto)
         {
             var lesson = new Lesson
             {
-                URL = l.URL,
-                Duration = l.Duration,
-                titre = l.titre,
-  
-                CourseId = l.CourseId
+                URL = dto.URL,
+                Duration = dto.Duration,
+                titre = dto.titre,
+                CourseId = dto.CourseId
             };
+
             _context.Lesson.Add(lesson);
             _context.SaveChanges();
             return lesson;
         }
+
         public Lesson UpdateLesson(int id, Lesson l)
         {
             var lesson = _context.Lesson.FirstOrDefault(les => les.LessonId == id);

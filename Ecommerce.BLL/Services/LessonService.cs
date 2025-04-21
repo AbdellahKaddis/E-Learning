@@ -22,7 +22,8 @@ namespace Ecommerce.BLL.Services
 
         public List<Lesson> GetAllLessons() => _repo.GetAllLessons();
         public Lesson GetLessonId(int id) => _repo.GetLessonId(id);
-    public Lesson AddLesson(Lesson l) => _repo.AddLesson(l);
+        public Lesson AddLesson(LessonDto dto) => _repo.AddLesson(dto);
+
         public bool DeleteLesson(int id) => _repo.DeleteLesson(id);
         public Lesson UpdateLesson(int id, Lesson l) => _repo.UpdateLesson(id, l);
     }

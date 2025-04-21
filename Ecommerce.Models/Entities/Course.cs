@@ -16,7 +16,7 @@ namespace Ecommerce.Models.Entities
         public string ImageCourse { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }
-        public List<Lesson> lessons { get; set; }
+        public List<Lesson>? lessons { get; set; }
         public int UserId { get; set; }
         public User? User { get; set; }
         public DateTime Created { get; set; } = DateTime.UtcNow;

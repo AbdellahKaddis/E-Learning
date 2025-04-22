@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.Entities
 {
-    public class Location
+    public class Classe
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Schedule> Schedules { get; set; }
+        public List<Student>? students { get; set; }
+
+        public List<Enrollement> enrollements { get; set;}
+
+        public List<Schedule> schedules { get; set; }
     }
 }

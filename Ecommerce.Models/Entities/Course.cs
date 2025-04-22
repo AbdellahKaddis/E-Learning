@@ -22,5 +22,7 @@ namespace Ecommerce.Models.Entities
         public DateTime Created { get; set; } = DateTime.UtcNow;
         public DateTime Updated { get; set; } = DateTime.UtcNow;
 
+        public List<Schedule> Schedules { get; set; }
+
     }
 }

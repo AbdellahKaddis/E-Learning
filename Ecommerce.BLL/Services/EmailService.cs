@@ -48,7 +48,7 @@ namespace Ecommerce.BLL.Services
         public async Task SendEmailAsync(string toEmail, string FullName, bool isBodyHtml = false)
         {
             string subject = "Welcome to BitBot Enterprise!";
-            string logoUrl = "https://media.licdn.com/...";
+            string logoUrl = "https://i.imgur.com/luvAL8B.png";
 
             string body = $@"
             <!DOCTYPE html>

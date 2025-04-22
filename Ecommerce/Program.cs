@@ -54,6 +54,11 @@ builder.Services.AddScoped<ClasseService>();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<LocationRepository>();
 
+builder.Services.AddScoped<EnrollementService>();
+builder.Services.AddScoped<EnrollementRepository>();
+
+builder.Services.AddScoped<ScheduleService>();
+builder.Services.AddScoped<ScheduleRepository>();
 
 //// Configure CORS
 builder.Services.AddCors(options =>
@@ -84,6 +89,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
 
 app.UseCors("AllowFrontend");
 app.UseDeveloperExceptionPage(); 

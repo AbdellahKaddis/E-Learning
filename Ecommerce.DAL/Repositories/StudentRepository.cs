@@ -100,7 +100,8 @@ namespace Ecommerce.DAL.Repositories
             {
                 DateOfBirth = dto.DateOfBirth,
                 UserId = dto.UserId,
-                ParentId = dto.ParentId
+                ParentId = dto.ParentId,
+                ClasseId = dto.ClasseId,
             };
             _context.Students.Add(student);
             await _context.SaveChangesAsync();
@@ -131,6 +132,7 @@ namespace Ecommerce.DAL.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        
     }
 
 }

@@ -1,7 +1,6 @@
 ﻿using Ecommerce.DAL.Repositories;
 using Ecommerce.Models.DTOs;
 using Ecommerce.Models.Entities;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,7 +109,6 @@ namespace Ecommerce.BLL.Services
             }
             return false;
         }
-        public async Task<List<StudentInfoDTO>> GetParentChildrenByIdAsync(int id)
-            => await _parentRepo.GetParentChildrenByIdAsync(id);
+
     }
 }

@@ -74,15 +74,6 @@ namespace Ecommerce.Api.Controllers
             var success = await _parentService.DeleteParentAsync(id);
             return success ? Ok("Deleted successfully") : NotFound("No Parent found.");
         }
-
-        [HttpGet("{id}/children")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<StudentInfoDTO>>> GetParentChildrenByIdAsync(int id)
-        {
-            var children = await _parentService.GetParentChildrenByIdAsync(id);
-            return children.Any() ? Ok(children) : NotFound("No Children Found.");
-        }
     }
 
 }

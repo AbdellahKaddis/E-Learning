@@ -92,18 +92,5 @@ namespace Ecommerce.DAL.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-
-        public async Task<List<StudentInfoDTO>> GetParentChildrenByIdAsync(int id)
-        {
-           return await _context.Students
-                .Include(s=>s.User)
-                .Where(s => s.ParentId == id)
-                .Select(s=> new StudentInfoDTO
-                {
-                    Id = s.Id,
-                    FirstName = s.User.FirstName,
-                    LastName = s.User.LastName
-                }).ToListAsync();
-        }
     }
 }

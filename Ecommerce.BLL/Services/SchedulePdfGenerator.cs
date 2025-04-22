@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Models.DTOs
+namespace Ecommerce.BLL.Services
 {
-    public class UpdateClassDTO
+    internal class SchedulePdfGenerator
     {
-        public string Name { get; set; }
     }
 }

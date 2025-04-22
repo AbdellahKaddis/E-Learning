@@ -72,7 +72,5 @@ namespace Ecommerce.Api.Controllers
             var success = await _studentService.DeleteStudentAsync(id);
             return success ? Ok("Deleted successfully") : NotFound("No Student found.");
         }
-
-
     }
 }

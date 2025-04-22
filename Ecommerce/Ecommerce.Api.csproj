@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -23,10 +23,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Ecommerce.BLL\Ecommerce.BLL.csproj" />
     <ProjectReference Include="..\Ecommerce.DAL\Ecommerce.DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

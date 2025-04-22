@@ -47,18 +47,9 @@ builder.Services.AddScoped<ParentRepository>();
 
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<StudentRepository>();
-builder.Services.AddScoped<ClassRepository>();
-builder.Services.AddScoped<ClasseService>();
 
 
-builder.Services.AddScoped<LocationService>();
-builder.Services.AddScoped<LocationRepository>();
 
-builder.Services.AddScoped<EnrollementService>();
-builder.Services.AddScoped<EnrollementRepository>();
-
-builder.Services.AddScoped<ScheduleService>();
-builder.Services.AddScoped<ScheduleRepository>();
 
 //// Configure CORS
 builder.Services.AddCors(options =>
@@ -83,6 +74,7 @@ builder.Services.AddScoped<CourseService>();
 
 
 
+
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNameCaseInsensitive = true);// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
@@ -90,9 +82,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
 app.UseCors("AllowFrontend");
-app.UseDeveloperExceptionPage(); 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

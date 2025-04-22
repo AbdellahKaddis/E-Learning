@@ -12,6 +12,8 @@ namespace Ecommerce.Models.Entities
         public string CategoryName { get; set; }
         public string ImageCategory { get; set; }
         public List<Course>? Course { get; set;}
+
+        public List<Enrollement> Enrollements { get; set; }
     }
 
 }

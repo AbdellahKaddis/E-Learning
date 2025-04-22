@@ -17,9 +17,17 @@ namespace Ecommerce.DAL.Db
         public DbSet<Parent> Parents { get; set; }
 
         public DbSet<Student> Students { get; set; }
+        public DbSet<Lesson> Lesson { get; set; }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Classe> Classes { get; set; }
+
+        public DbSet<Location> Locations { get; set; }
+
+        public DbSet<Enrollement> Enrollements { get; set; }
+
+        public DbSet<Schedule> Schedule { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -48,12 +56,32 @@ namespace Ecommerce.DAL.Db
            
 
             modelBuilder.Entity<Course>()
-       .Property(c => c.Created)
-       .HasDefaultValueSql("GETDATE()");
-            modelBuilder.Entity<Course>()
-       .Property(c => c.Updated)
-       .HasDefaultValueSql("GETDATE()");
+                .Property(c => c.Created)
+                .HasDefaultValueSql("GETDATE()");
 
+            modelBuilder.Entity<Course>()
+              .Property(c => c.Updated)
+              .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Location>()
+             .HasIndex(l => l.Name)
+             .IsUnique();
+
+            modelBuilder.Entity<Classe>().HasMany(c => c.enrollements).WithOne(e => e.Classe).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Enrollement>().HasKey(e => e.Id);
+
+            modelBuilder.Entity<Enrollement>().Property(e => e.EnrollementDate).HasDefaultValueSql("GETDATE()");
+            
+            modelBuilder.Entity<Enrollement>().HasOne(e => e.Category).WithMany(c => c.Enrollements).HasForeignKey(e=>e.CategoryId).OnDelete(DeleteBehavior.Restrict);
+  
+            modelBuilder.Entity<Enrollement>().HasOne(e => e.User).WithMany(u => u.Enrollements).HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Location>().HasMany(l => l.Schedules).WithOne(s => s.Location).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Course>().HasMany(c => c.Schedules).WithOne(s => s.Course).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Classe>().HasMany(c => c.schedules).WithOne(s => s.Classe).OnDelete(DeleteBehavior.Restrict);
 
         }
     }

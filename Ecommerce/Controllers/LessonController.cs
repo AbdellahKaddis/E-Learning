@@ -39,7 +39,14 @@ namespace Ecommerce.Api.Controllers
         public ActionResult<Lesson> GetLessonId(int id)
         {
             var Lesson = _service.GetLessonId(id);
-            return Lesson == null ? NotFound() : Ok(Lesson);
+            return Lesson == null ? NotFound() : Ok(new updateLessonDto
+            {
+
+                titre = Lesson.titre,
+                URL = Lesson.URL,
+                Duration = Lesson.Duration,
+                CourseId = Lesson.CourseId
+            });
         }
 
 
@@ -61,7 +68,15 @@ namespace Ecommerce.Api.Controllers
                 return BadRequest(ModelState);
 
             var lessonAdded = _service.AddLesson(dto);
-            return CreatedAtAction(nameof(AddLesson), new { id = lessonAdded.LessonId }, lessonAdded);
+            return CreatedAtAction(nameof(AddLesson), new { id = lessonAdded.LessonId }, new createLessonDto
+{
+   
+    titre = lessonAdded.titre,
+    URL = lessonAdded.URL,
+    Duration = lessonAdded.Duration,
+    CourseId =lessonAdded.CourseId
+});
+
         }
 
 

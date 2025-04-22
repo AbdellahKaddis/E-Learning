@@ -25,9 +25,11 @@ namespace Ecommerce.DAL.Db
 
         public DbSet<Location> Locations { get; set; }
 
+
         public DbSet<Enrollement> Enrollements { get; set; }
 
         public DbSet<Schedule> Schedule { get; set; }
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -56,6 +58,7 @@ namespace Ecommerce.DAL.Db
            
 
             modelBuilder.Entity<Course>()
+
                 .Property(c => c.Created)
                 .HasDefaultValueSql("GETDATE()");
 
@@ -82,6 +85,7 @@ namespace Ecommerce.DAL.Db
             modelBuilder.Entity<Course>().HasMany(c => c.Schedules).WithOne(s => s.Course).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Classe>().HasMany(c => c.schedules).WithOne(s => s.Classe).OnDelete(DeleteBehavior.Restrict);
+
 
         }
     }

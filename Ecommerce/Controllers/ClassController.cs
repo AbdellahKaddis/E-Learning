@@ -46,7 +46,7 @@ namespace Ecommerce.Api.Controllers
         public IActionResult DeleteClass(int id)
         {
             var success = _service.DeleteClass(id);
-            return success ? Ok() : NotFound();
+            return success ? Ok(new { message = "Class deletes successfully" }) : NotFound("No Class Found.");
         }
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]

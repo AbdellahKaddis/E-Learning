@@ -16,41 +16,44 @@ namespace Ecommerce.Api.Controllers
         {
             _service = service;
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<CategoryDTO>>> GetAllCategories()
+        {
+            var categories = await _service.GetAllCategoriesAsync();
+            return categories.Any() ? Ok(categories) : NotFound("No categories Found.");
+        }
         [HttpPost]
-        public IActionResult AddCategory([FromBody] CategoryDTO category)
+        public async Task<IActionResult> AddCategory([FromBody] CategoryDTO category)
         {
             if (category == null || string.IsNullOrWhiteSpace(category.CategoryName))
                 return BadRequest("Category is invalid");
 
-            var newCategory = _service.AddCategory(category);
+            var newCategory = await _service.AddCategoryAsync(category);
             return Ok(new { message = "Category created successfully" });
         }
-        [HttpGet]
-        public ActionResult<IEnumerable<CategoryDTO>> GetAllCategories()
-        {
-            var categories = _service.GetAllCategories();
-            return categories.Any() ? Ok(categories) : NotFound("No categories Found.");
-        }
+
         [HttpGet("{id}")]
-        public ActionResult<Category> GetCategoryById(int id)
+        public async Task<ActionResult<CategoryDTO>> GetCategoryById(int id)
         {
-            var category = _service.GetCategoryById(id);
+            var category = await _service.GetCategoryByIdAsync(id);
             return category == null ? NotFound() : Ok(category);
         }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
-            var success = _service.DeleteCategory(id);
+            var success = await _service.DeleteCategoryAsync(id);
             return success ? Ok(new { message = "Category deleted successfully" }) : NotFound("No categories Found.");
         }
+
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult UpdateCategory(int id, CategoryDTO cat)
+        public async Task<IActionResult> UpdateCategory(int id, [FromBody] CategoryDTO cat)
         {
-            var existingCategory = _service.GetCategoryById(id);
+            var existingCategory = await _service.GetCategoryByIdAsync(id);
             if (existingCategory == null)
             {
                 return NotFound("Category not found.");
@@ -59,7 +62,7 @@ namespace Ecommerce.Api.Controllers
             existingCategory.CategoryName = cat.CategoryName;
             existingCategory.ImageCategory = cat.ImageCategory;
 
-            var updated = _service.UpdateCategory(existingCategory);
+            var updated = await _service.UpdateCategoryAsync(existingCategory);
             if (!updated)
             {
                 return StatusCode(500, "Failed to update category.");
@@ -67,6 +70,7 @@ namespace Ecommerce.Api.Controllers
 
             return Ok(existingCategory);
         }
+
 
 
     }

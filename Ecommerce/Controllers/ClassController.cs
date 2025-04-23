@@ -18,50 +18,56 @@ namespace Ecommerce.Api.Controllers
             _service = service;
         }
         [HttpPost]
-        public IActionResult AddClass([FromBody] CreateClassDTO clase)
+        public async Task<IActionResult> AddClass([FromBody] CreateClassDTO clase)
         {
             if (clase is null)
-                return BadRequest("CLass is invalid");
+                return BadRequest("Class is invalid");
             if (string.IsNullOrWhiteSpace(clase.Name))
                 return BadRequest("ClassName is invalid");
 
-            var newClass = _service.AddClass(clase);
-            return Ok(new { message = "Class created successfully" });
+            var newClass = await _service.AddClassAsync(clase);
+            return newClass ? Ok(new { message = "Class created successfully" })
+                            : StatusCode(500, "Failed to create class.");
         }
+
         [HttpGet]
-        public ActionResult<IEnumerable<ClassDTO>> GetAllClass()
+        public async Task<ActionResult<IEnumerable<ClassDTO>>> GetAllClass()
         {
-            var clases = _service.GetAllclass();
+            var clases = await _service.GetAllClassAsync();
             return clases.Any() ? Ok(clases) : NotFound("No Class Found.");
         }
+
         [HttpGet("{id}")]
-        public ActionResult<ClassDTO> GetClassById(int id)
+        public async Task<ActionResult<ClassDTO>> GetClassById(int id)
         {
-            var clase = _service.GetClassById(id);
+            var clase = await _service.GetClassByIdAsync(id);
             return clase == null ? NotFound() : Ok(clase);
         }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult DeleteClass(int id)
+        public async Task<IActionResult> DeleteClass(int id)
         {
-            var success = _service.DeleteClass(id);
-            return success ? Ok(new { message = "Class deletes successfully" }) : NotFound("No Class Found.");
+            var success = await _service.DeleteClassAsync(id);
+            return success ? Ok(new { message = "Class deleted successfully" }) : NotFound("No Class Found.");
         }
+
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult UpdateClass(int id, UpdateClassDTO cl)
+        public async Task<IActionResult> UpdateClass(int id, [FromBody] UpdateClassDTO cl)
         {
-            var claseExists = _service.GetClassById(id);
+            var claseExists = await _service.GetClassByIdAsync(id);
             if (claseExists == null)
                 return NotFound("Class not found.");
 
-            var updated = _service.UpdateClass(id, cl);
+            var updated = await _service.UpdateClassAsync(id, cl);
             if (!updated)
                 return StatusCode(500, "Update failed.");
 
             return Ok(new { message = "Class updated successfully" });
         }
+
     }
 }

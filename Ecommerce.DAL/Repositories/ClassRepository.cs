@@ -18,58 +18,60 @@ namespace Ecommerce.DAL.Repositories
         {
             _context = context;
         }
-        public List<ClassDTO> GetAllClass()
+        public async Task<List<ClassDTO>> GetAllClassAsync()
         {
-            return _context.Classes
+            return await _context.Classes
                 .Select(clase => new ClassDTO
                 {
                     Id = clase.Id,
                     Name = clase.Name,
                 })
-                .ToList();
+                .ToListAsync();
         }
 
-        public ClassDTO GetClassById(int id)
+        public async Task<ClassDTO> GetClassByIdAsync(int id)
         {
-            return _context.Classes
+            return await _context.Classes
                 .Where(clase => clase.Id == id)
                 .Select(clase => new ClassDTO
                 {
                     Id = clase.Id,
                     Name = clase.Name,
-                }).FirstOrDefault();
+                }).FirstOrDefaultAsync();
         }
-        public bool AddClass(CreateClassDTO clase)
+
+        public async Task<bool> AddClassAsync(CreateClassDTO clase)
         {
             var clas = new Classe
             {
                 Name = clase.Name,
-
-
             };
 
-            _context.Classes.Add(clas);
-            _context.SaveChanges();
+            await _context.Classes.AddAsync(clas);
+            await _context.SaveChangesAsync();
 
             return true;
         }
-        public bool UpdateClass(int ID,UpdateClassDTO cl)
+
+        public async Task<bool> UpdateClassAsync(int ID, UpdateClassDTO cl)
         {
-            var clase = _context.Classes.Find(ID);
+            var clase = await _context.Classes.FindAsync(ID);
             if (clase == null) return false;
 
             clase.Name = cl.Name;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        public bool DeleteClass(int id)
+
+        public async Task<bool> DeleteClassAsync(int id)
         {
-            var clase = _context.Classes.Find(id);
+            var clase = await _context.Classes.FindAsync(id);
             if (clase == null) return false;
 
             _context.Classes.Remove(clase);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
+
     }
 }

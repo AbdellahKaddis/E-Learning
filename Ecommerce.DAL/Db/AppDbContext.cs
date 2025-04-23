@@ -29,6 +29,7 @@ namespace Ecommerce.DAL.Db
         public DbSet<Enrollement> Enrollements { get; set; }
 
         public DbSet<Schedule> Schedule { get; set; }
+        public DbSet<LessonProgress> lessonProgresses { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options)

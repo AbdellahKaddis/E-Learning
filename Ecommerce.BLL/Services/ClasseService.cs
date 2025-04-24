@@ -16,15 +16,13 @@ namespace Ecommerce.BLL.Services
         {
             _repo = repo;
         }
-        public bool AddClass(CreateClassDTO clase)
-        {
-            return _repo.AddClass(clase);
-        }
-        public List<ClassDTO> GetAllclass() => _repo.GetAllClass();
-        public ClassDTO GetClassById(int id) => _repo.GetClassById(id);
-        public bool DeleteClass(int id) => _repo.DeleteClass(id);
-        public bool UpdateClass(int ID,UpdateClassDTO clase) => _repo.UpdateClass(ID,clase);
 
-       
-    }
+
+        public Task<List<ClassDTO>> GetAllClassAsync() => _repo.GetAllClassAsync();
+        public Task<ClassDTO> GetClassByIdAsync(int id) => _repo.GetClassByIdAsync(id);
+        public Task<bool> AddClassAsync(CreateClassDTO clase) => _repo.AddClassAsync(clase);
+        public Task<bool> UpdateClassAsync(int ID, UpdateClassDTO clase) => _repo.UpdateClassAsync(ID, clase);
+        public Task<bool> DeleteClassAsync(int id) => _repo.DeleteClassAsync(id);
+
+  }
 }

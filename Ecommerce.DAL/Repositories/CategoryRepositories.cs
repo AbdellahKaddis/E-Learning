@@ -19,29 +19,31 @@ namespace Ecommerce.DAL.Repositories
         {
             _context = context;
         }
-        public List<CategoryDTO> GetAllCategories()
+        public async Task<List<CategoryDTO>> GetAllCategoriesAsync()
         {
-            return _context.Categories
+            return await _context.Categories
                 .Select(ca => new CategoryDTO
                 {
                     Id = ca.Id,
-                    CategoryName =  ca.CategoryName,
+                    CategoryName = ca.CategoryName,
                     ImageCategory = ca.ImageCategory,
-
-                }).ToList();
+                })
+                .ToListAsync();
         }
-        public CategoryDTO GetCategoryById(int id)
+
+        public async Task<CategoryDTO> GetCategoryByIdAsync(int id)
         {
-            return _context.Categories
+            return await _context.Categories
                 .Where(ca => ca.Id == id)
                 .Select(ca => new CategoryDTO
                 {
                     Id = ca.Id,
                     CategoryName = ca.CategoryName,
                     ImageCategory = ca.ImageCategory,
-                }).FirstOrDefault();
+                }).FirstOrDefaultAsync();
         }
-        public Category AddCategory(CategoryDTO cat)
+
+        public async Task<Category> AddCategoryAsync(CategoryDTO cat)
         {
             var category = new Category
             {
@@ -49,29 +51,30 @@ namespace Ecommerce.DAL.Repositories
                 ImageCategory = cat.ImageCategory
             };
 
-            _context.Categories.Add(category);
-            _context.SaveChanges();
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
 
             return category;
         }
 
-        public bool UpdateCategory(CategoryDTO cat)
+        public async Task<bool> UpdateCategoryAsync(CategoryDTO cat)
         {
-            var category = _context.Categories.Find(cat.Id);
+            var category = await _context.Categories.FindAsync(cat.Id);
             if (category == null) return false;
 
             category.CategoryName = cat.CategoryName;
             category.ImageCategory = cat.ImageCategory;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        public bool DeleteCategory(int id)
+
+        public async Task<bool> DeleteCategoryAsync(int id)
         {
-            var category = _context.Categories.Find(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category == null) return false;
 
             _context.Categories.Remove(category);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
 

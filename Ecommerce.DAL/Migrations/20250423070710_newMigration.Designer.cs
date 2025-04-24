@@ -4,6 +4,7 @@ using Ecommerce.DAL.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250423070710_newMigration")]
+    partial class newMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,12 +327,7 @@ namespace Ecommerce.DAL.Migrations
 
                     b.HasIndex("LocationId");
 
-                    b.ToTable("Schedule", t =>
-                        {
-                            t.HasCheckConstraint("CK_Schedule_Day", "[Day] >= 0 AND [Day] <= 6");
-
-                            t.HasCheckConstraint("CK_Schedule_Week", "[Week] >= 1 AND [Week] <= 52");
-                        });
+                    b.ToTable("Schedule");
                 });
 
             modelBuilder.Entity("Ecommerce.Models.Entities.Student", b =>

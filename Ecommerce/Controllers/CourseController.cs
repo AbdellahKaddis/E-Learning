@@ -17,50 +17,61 @@ namespace Ecommerce.Api.Controllers
             _service = service;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<CourseDTO>> GetAllCourses()
+        public async Task<ActionResult<IEnumerable<CourseDTO>>> GetAllCourses()
         {
-            var courses = _service.GetAllCourses();
+            var courses = await _service.GetAllCoursesAsync();
             return courses.Any() ? Ok(courses) : NotFound("No courses Found.");
         }
+
         [HttpGet("{id}")]
-        public ActionResult<CourseDTO> GetCourseById(int id)
+        public async Task<ActionResult<CourseDTO>> GetCourseById(int id)
         {
-            var course = _service.GetCourseById(id);
+            var course = await _service.GetCourseByIdAsync(id);
             return course == null ? NotFound() : Ok(course);
         }
-        [HttpPost]
-        public IActionResult AddCourse([FromBody] CreateCourseDTO course)
-        {
-            if (course is null)
-                return BadRequest("Course is invalid");
-            if (string.IsNullOrWhiteSpace(course.CourseName))
-                return BadRequest("CourseName is invalid");
-            if (string.IsNullOrWhiteSpace(course.CourseDescription))
-                return BadRequest("CourseDescription is invalid");
-            if (string.IsNullOrWhiteSpace(course.Level))
-                return BadRequest("Level is invalid");
-            if (string.IsNullOrWhiteSpace(course.ImageCourse))
-                return BadRequest("Image is invalid");
 
-            var newCourse = _service.AddCourse(course);
-            return Ok(new { message = "Course created successfully" });
+        [HttpPost]
+        public async Task<IActionResult> AddCourse([FromBody] CreateCourseDTO course)
+        {
+            if (course is null ||
+                string.IsNullOrWhiteSpace(course.CourseName) ||
+                string.IsNullOrWhiteSpace(course.CourseDescription) ||
+                string.IsNullOrWhiteSpace(course.Level) ||
+                string.IsNullOrWhiteSpace(course.ImageCourse))
+            {
+                return BadRequest("Invalid Course data.");
+            }
+
+            var result = await _service.AddCourseAsync(course);
+            return result ? Ok(new { message = "Course created successfully" })
+                          : StatusCode(500, "Failed to create course.");
         }
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult UpdateCourse(int id, UpdateCourseDTO course)
+        public async Task<IActionResult> UpdateCourse(int id, [FromBody] UpdateCourseDTO course)
         {
-            var courseExists = _service.GetCourseById(id);
+            var courseExists = await _service.GetCourseByIdAsync(id);
             if (courseExists == null)
                 return NotFound("Course not found.");
 
-            var updated = _service.UpdateCourse(id, course);
+            var updated = await _service.UpdateCourseAsync(id, course);
             if (!updated)
                 return StatusCode(500, "Update failed.");
 
             return Ok(new { message = "Course updated successfully" });
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> DeleteCourse(int id)
+        {
+            var success = await _service.DeleteCourseAsync(id);
+            return success ? Ok(new { message = "Course deleted successfully" }) : NotFound("No course Found.");
+        }
+
 
     }
 }

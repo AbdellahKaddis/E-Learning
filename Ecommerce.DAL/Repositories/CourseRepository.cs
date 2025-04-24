@@ -19,9 +19,9 @@ namespace Ecommerce.DAL.Repositories
         {
             _context = context;
         }
-        public List<CourseDTO> GetAllCourses()
+        public async Task<List<CourseDTO>> GetAllCoursesAsync()
         {
-            return _context.Courses
+            return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.User)
                 .Select(course => new CourseDTO
@@ -36,13 +36,12 @@ namespace Ecommerce.DAL.Repositories
                     Formateur = course.User.FirstName,
                     Created = course.Created,
                     Updated = course.Updated
-                })
-                .ToList();
+                }).ToListAsync();
         }
 
-        public CourseDTO GetCourseById(int id)
+        public async Task<CourseDTO> GetCourseByIdAsync(int id)
         {
-            return _context.Courses
+            return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.User)
                 .Where(course => course.Id == id)
@@ -58,9 +57,10 @@ namespace Ecommerce.DAL.Repositories
                     Formateur = course.User.FirstName,
                     Created = course.Created,
                     Updated = course.Updated
-                }).FirstOrDefault();
+                }).FirstOrDefaultAsync();
         }
-        public bool AddCourse(CreateCourseDTO course)
+
+        public async Task<bool> AddCourseAsync(CreateCourseDTO course)
         {
             var cours = new Course
             {
@@ -73,18 +73,16 @@ namespace Ecommerce.DAL.Repositories
                 UserId = course.UserId,
                 Created = DateTime.UtcNow,
                 Updated = DateTime.UtcNow,
-                
             };
 
-            _context.Courses.Add(cours);
-            _context.SaveChanges();
-
+            await _context.Courses.AddAsync(cours);
+            await _context.SaveChangesAsync();
             return true;
         }
 
-        public bool UpdateCourse(int id, UpdateCourseDTO course)
+        public async Task<bool> UpdateCourseAsync(int id, UpdateCourseDTO course)
         {
-            var cours = _context.Courses.Find(id);
+            var cours = await _context.Courses.FindAsync(id);
             if (cours == null) return false;
 
             cours.CourseName = course.CourseName;
@@ -95,9 +93,21 @@ namespace Ecommerce.DAL.Repositories
             cours.CategoryId = course.CategoryId;
             cours.UserId = course.UserId;
             cours.Updated = DateTime.UtcNow;
-            _context.SaveChanges();
+
+            await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> DeleteCourseAsync(int id)
+        {
+            var course = await _context.Courses.FindAsync(id);
+            if (course == null) return false;
+
+            _context.Courses.Remove(course);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
 
     }
 }

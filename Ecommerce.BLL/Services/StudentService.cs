@@ -188,7 +188,8 @@ namespace Ecommerce.BLL.Services
             var updated = await UpdateStudentAsync(id, new UpdateStudentDTO
             {
                 DateOfBirth = dto.DateOfBirth,
-                ParentId = dto.ParentId
+                ParentId = dto.ParentId,
+                ClasseId = dto.ClassId
             });
 
             return updated;

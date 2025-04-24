@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ecommerce.BLL.Services;
 using Ecommerce.DAL.Repositories;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,10 @@ builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<StudentRepository>();
 
 
+builder.Services.AddScoped<ScheduleService>();
+builder.Services.AddScoped<ScheduleRepository>();
+builder.Services.AddScoped<LessonProgressService>();
+builder.Services.AddScoped<LessonProgressRepository>();
 
 
 //// Configure CORS
@@ -79,6 +84,9 @@ builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializ
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+QuestPDF.Settings.License = LicenseType.Community;
+
 
 var app = builder.Build();
 

@@ -26,5 +26,6 @@ namespace Ecommerce.Models.Entities
         public Parent Parent { get; set; }
 
         public Student Student { get; set; }
+
     }
 }

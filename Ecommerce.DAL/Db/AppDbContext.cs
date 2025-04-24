@@ -88,6 +88,13 @@ namespace Ecommerce.DAL.Db
             modelBuilder.Entity<Classe>().HasMany(c => c.schedules).WithOne(s => s.Classe).OnDelete(DeleteBehavior.Restrict);
 
 
+            modelBuilder.Entity<Schedule>()
+                .ToTable(tb => tb.HasCheckConstraint("CK_Schedule_Day", "[Day] >= 0 AND [Day] <= 6"));
+
+            modelBuilder.Entity<Schedule>()
+                .ToTable(tb => tb.HasCheckConstraint("CK_Schedule_Week", "[Week] >= 1 AND [Week] <= 52"));
+
+
         }
     }
 }

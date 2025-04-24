@@ -65,23 +65,24 @@ namespace Ecommerce.DAL.Repositories
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<int> AddScheduleAsync(CreateScheduleDTO dto)
+        public async Task AddSchedulesAsync(List<CreateScheduleDTO> schedules)
         {
-            var schedule = new Schedule
+            var scheduleEntities = schedules.Select(s => new Schedule
             {
-                Year = dto.Year,
-                Week = dto.Week,
-                Day = dto.Day,
-                ClasseId = dto.ClasseId,
-                LocationId = dto.LocationId,
-                CourseId = dto.CourseId,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime
-            };
-            _context.Schedule.Add(schedule);
+                Year = s.Year,
+                Week = s.Week,
+                Day = s.Day,
+                ClasseId = s.ClasseId,
+                LocationId = s.LocationId,
+                CourseId = s.CourseId,
+                StartTime = s.StartTime,
+                EndTime = s.EndTime
+            }).ToList(); 
+
+            await _context.Schedule.AddRangeAsync(scheduleEntities);
             await _context.SaveChangesAsync();
-            return schedule.Id;
         }
+
 
         public async Task<bool> UpdateScheduleAsync(int id, UpdateScheduleDTO dto)
         {
@@ -149,6 +150,34 @@ namespace Ecommerce.DAL.Repositories
                 StartTime = s.StartTime,
                 EndTime = s.EndTime
             }).ToList();
+        }
+        public async Task<List<Schedule>> GetSchedulesByYearAndWeekAsync(int year, int week, int classeId)
+        {
+            return await _context.Schedule
+                .Include(s => s.Classe)
+                .Include(s => s.Location)
+                .Include(s => s.Course)
+                    .ThenInclude(c => c.User)
+                .Where(s => s.Year == year && s.Week == week && s.ClasseId == classeId)
+                .OrderBy(s => s.Day)
+                .ThenBy(s => s.StartTime)
+                .ToListAsync();
+        }
+
+        public async Task<List<StudentWithParentDTO>> GetStudentsWithTheirParentsByClassId(int id)
+        {
+            return await _context.Students
+                    .Include(s => s.User)
+                    .Include(s => s.Parent)
+                    .ThenInclude(s => s.User)
+                    .Where(s => s.ClasseId == id)
+                    .Select(s => new StudentWithParentDTO
+                    {
+                        StudentFullName = $"{s.User.FirstName} {s.User.LastName}",
+                        ParentFullName = $"{s.Parent.User.FirstName} {s.Parent.User.LastName}",
+                        ParentEmail = s.Parent.User.Email
+                    })
+                    .ToListAsync();
         }
 
     }

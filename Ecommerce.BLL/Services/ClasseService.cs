@@ -24,5 +24,7 @@ namespace Ecommerce.BLL.Services
         public ClassDTO GetClassById(int id) => _repo.GetClassById(id);
         public bool DeleteClass(int id) => _repo.DeleteClass(id);
         public bool UpdateClass(int ID,UpdateClassDTO clase) => _repo.UpdateClass(ID,clase);
+
+       
     }
 }

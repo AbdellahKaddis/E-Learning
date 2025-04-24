@@ -36,10 +36,14 @@ namespace Ecommerce.Api.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<ScheduleDTO>> AddSchedule(CreateScheduleDTO dto)
+        public async Task<ActionResult> AddSchedules(List<CreateScheduleDTO> newSchedules)
         {
-            var created = await _scheduleService.AddScheduleAsync(dto);
-            return CreatedAtAction(nameof(GetScheduleById), new { id = created.Id }, created);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _scheduleService.AddSchedulesAsync(newSchedules);
+            return StatusCode(StatusCodes.Status201Created);
+
         }
 
         [HttpPut("{id}")]

@@ -26,7 +26,6 @@ namespace Ecommerce.DAL.Db
         public DbSet<Location> Locations { get; set; }
 
 
-        public DbSet<Enrollement> Enrollements { get; set; }
 
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<LessonProgress> lessonProgresses { get; set; }
@@ -71,15 +70,7 @@ namespace Ecommerce.DAL.Db
              .HasIndex(l => l.Name)
              .IsUnique();
 
-            modelBuilder.Entity<Classe>().HasMany(c => c.enrollements).WithOne(e => e.Classe).OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Enrollement>().HasKey(e => e.Id);
-
-            modelBuilder.Entity<Enrollement>().Property(e => e.EnrollementDate).HasDefaultValueSql("GETDATE()");
             
-            modelBuilder.Entity<Enrollement>().HasOne(e => e.Category).WithMany(c => c.Enrollements).HasForeignKey(e=>e.CategoryId).OnDelete(DeleteBehavior.Restrict);
-  
-            modelBuilder.Entity<Enrollement>().HasOne(e => e.User).WithMany(u => u.Enrollements).HasForeignKey(e => e.UserId).OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Location>().HasMany(l => l.Schedules).WithOne(s => s.Location).OnDelete(DeleteBehavior.Restrict);
 

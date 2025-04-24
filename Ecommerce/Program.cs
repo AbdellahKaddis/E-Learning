@@ -55,8 +55,6 @@ builder.Services.AddScoped<ClasseService>();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<LocationRepository>();
 
-builder.Services.AddScoped<EnrollementService>();
-builder.Services.AddScoped<EnrollementRepository>();
 
 builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddScoped<ScheduleRepository>();

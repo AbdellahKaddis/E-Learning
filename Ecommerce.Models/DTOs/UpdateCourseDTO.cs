@@ -10,7 +10,7 @@ namespace Ecommerce.Models.DTOs
     {
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
-        public TimeSpan Duration { get; set; }
+        public string Duration { get; set; }
         public string Level { get; set; }
         public string ImageCourse { get; set; }
         public int CategoryId { get; set; }

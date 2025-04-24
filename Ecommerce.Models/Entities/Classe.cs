@@ -12,8 +12,6 @@ namespace Ecommerce.Models.Entities
         public string Name { get; set; }
         public List<Student>? students { get; set; }
 
-        public List<Enrollement> enrollements { get; set;}
-
         public List<Schedule> schedules { get; set; }
     }
 }

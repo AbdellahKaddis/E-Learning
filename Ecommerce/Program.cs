@@ -10,11 +10,11 @@ using Ecommerce.DAL.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Get the connection string from appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 // Configure the DbContext to use the connection string
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //JWT configuration
 builder.Services.AddAuthentication(options =>

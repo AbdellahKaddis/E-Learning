@@ -388,7 +388,7 @@ namespace Ecommerce.DAL.Migrations
             modelBuilder.Entity("Ecommerce.Models.Entities.Lesson", b =>
                 {
                     b.HasOne("Ecommerce.Models.Entities.Course", "Course")
-                        .WithMany()
+                        .WithMany("Lessons")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -503,6 +503,8 @@ namespace Ecommerce.DAL.Migrations
 
             modelBuilder.Entity("Ecommerce.Models.Entities.Course", b =>
                 {
+                    b.Navigation("Lessons");
+
                     b.Navigation("Schedules");
                 });
 

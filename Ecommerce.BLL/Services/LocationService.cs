@@ -40,4 +40,6 @@ namespace Ecommerce.BLL.Services
 
         public async Task<bool> DeleteLocationAsync(int id) => await _repo.DeleteLocationAsync(id);
     }
+
 }
+

@@ -16,3 +16,4 @@ namespace Ecommerce.Models.DTOs
         public int CourseId { get; set; }
     }
 }
+

@@ -48,6 +48,9 @@ builder.Services.AddScoped<ParentRepository>();
 
 builder.Services.AddScoped<StudentService>();
 builder.Services.AddScoped<StudentRepository>();
+builder.Services.AddScoped<ClassRepository>();
+builder.Services.AddScoped<ClasseService>();
+
 
 
 builder.Services.AddScoped<ScheduleService>();
@@ -55,6 +58,15 @@ builder.Services.AddScoped<ScheduleRepository>();
 builder.Services.AddScoped<LessonProgressService>();
 builder.Services.AddScoped<LessonProgressRepository>();
 
+builder.Services.AddScoped<LocationService>();
+builder.Services.AddScoped<LocationRepository>();
+
+
+
+builder.Services.AddScoped<ScheduleService>();
+builder.Services.AddScoped<ScheduleRepository>();
+builder.Services.AddScoped<LessonProgressService>();
+builder.Services.AddScoped<LessonProgressRepository>();
 
 //// Configure CORS
 builder.Services.AddCors(options =>
@@ -79,7 +91,6 @@ builder.Services.AddScoped<CourseService>();
 
 
 
-
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNameCaseInsensitive = true);// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
 builder.Services.AddEndpointsApiExplorer();
@@ -90,7 +101,9 @@ QuestPDF.Settings.License = LicenseType.Community;
 
 var app = builder.Build();
 
+
 app.UseCors("AllowFrontend");
+app.UseDeveloperExceptionPage(); 
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -21,7 +21,9 @@ namespace Ecommerce.Models.Entities
         public int LocationId { get; set; }
         public Location Location { get; set; }
         public int CourseId { get; set; }
+
         public Course Course { get; set; }
+
         public TimeSpan StartTime { get; set; }
         public TimeSpan EndTime { get; set; }
 

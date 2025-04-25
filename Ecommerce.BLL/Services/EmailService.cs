@@ -51,9 +51,11 @@ namespace Ecommerce.BLL.Services
         public async Task SendEmailAsync(string toEmail, string FullName, bool isBodyHtml = false)
         {
 
+
             var schoolName = "BitBot";
             var subject = $"Welcome to {schoolName}!";
             var logoUrl = "https://i.imgur.com/luvAL8B.png";
+
 
 
             var body = $@"

@@ -27,4 +27,6 @@ namespace Ecommerce.BLL.Services
         public bool DeleteLesson(int id) => _repo.DeleteLesson(id);
         public Lesson UpdateLesson(int id, updateLessonDto l) => _repo.UpdateLesson(id, l);
     }
+
 }
+

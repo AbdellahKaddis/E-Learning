@@ -13,6 +13,8 @@ namespace Ecommerce.Models.DTOs
         public string? Password { get; set; }
         public DateOnly? DateOfBirth { get; set; }
         public int? ParentId { get; set; }
-        public int? ClassId { get; set; }
+
+        public int? ClassId { get; set;}
+
     }
 }

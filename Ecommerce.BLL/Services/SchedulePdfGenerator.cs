@@ -1,4 +1,5 @@
 
+
 ﻿using Ecommerce.Models.Entities;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
+
 
 public class SchedulePdfGenerator
 {
@@ -166,5 +168,7 @@ public class SchedulePdfGenerator
             });
         }).GeneratePdf();
     }
+
 }
+
 

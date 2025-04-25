@@ -17,3 +17,4 @@ namespace Ecommerce.Models.Entities
         public Course? Course { get; set; }
     }
 }
+

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250424155233_InitialCreate")]
+    [Migration("20250425113115_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -391,7 +391,7 @@ namespace Ecommerce.DAL.Migrations
             modelBuilder.Entity("Ecommerce.Models.Entities.Lesson", b =>
                 {
                     b.HasOne("Ecommerce.Models.Entities.Course", "Course")
-                        .WithMany()
+                        .WithMany("Lessons")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -506,6 +506,8 @@ namespace Ecommerce.DAL.Migrations
 
             modelBuilder.Entity("Ecommerce.Models.Entities.Course", b =>
                 {
+                    b.Navigation("Lessons");
+
                     b.Navigation("Schedules");
                 });
 

@@ -151,6 +151,39 @@ namespace Ecommerce.DAL.Repositories
                 EndTime = s.EndTime
             }).ToList();
         }
+
+        public async Task<List<ScheduleDTO>> GetInstructorScheduleForThisWeekAsync(int instructorId)
+        {
+            var today = DateTime.UtcNow;
+            var calendar = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+            int currentWeek = calendar.GetWeekOfYear(today, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+            int currentYear = today.Year;
+
+
+
+            // Get schedule entries for that instructor, current year & week
+            var schedules = await _context.Schedule
+                .Include(s => s.Course).ThenInclude(c => c.User)
+                .Include(s => s.Location)
+                .Include(s => s.Classe)
+                .Where(s => s.Course.UserId == instructorId && s.Year == currentYear && s.Week == currentWeek)
+                .ToListAsync();
+
+            // Map to DTOs (assuming you have ScheduleDTO with properties)
+            return schedules.Select(s => new ScheduleDTO
+            {
+                Id = s.Id,
+                Year = s.Year,
+                Week = s.Week,
+                Day = s.Day,
+                ClasseName = s.Classe.Name,
+                LocationName = s.Location.Name,
+                CourseName = s.Course.CourseName,
+                FormateurName = $"{s.Course.User.FirstName} {s.Course.User.LastName}",
+                StartTime = s.StartTime,
+                EndTime = s.EndTime
+            }).ToList();
+        }
         public async Task<List<Schedule>> GetSchedulesByYearAndWeekAsync(int year, int week, int classeId)
         {
             return await _context.Schedule

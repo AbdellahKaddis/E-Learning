@@ -73,5 +73,13 @@ namespace Ecommerce.Api.Controllers
             var schedules = await _scheduleService.GetStudentScheduleForThisWeekAsync(id);
             return schedules.Any() ? Ok(schedules) : NotFound("No Schedules Found.");
         }
+        [HttpGet("instructor/{id}/this-week")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<ScheduleDTO>>> GetInstructorScheduleForThisWeekAsync(int id)
+        {
+            var schedules = await _scheduleService.GetInstructorScheduleForThisWeekAsync(id);
+            return schedules.Any() ? Ok(schedules) : NotFound("No Schedules Found.");
+        }
     }
 }

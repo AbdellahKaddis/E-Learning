@@ -73,7 +73,8 @@ namespace Ecommerce.BLL.Services
         }
         public async Task<List<ScheduleDTO>> GetStudentScheduleForThisWeekAsync(int studentId)
     => await _scheduleRepo.GetStudentScheduleForThisWeekAsync(studentId);
-
+        public async Task<List<ScheduleDTO>> GetInstructorScheduleForThisWeekAsync(int instructorId)
+            => await _scheduleRepo.GetInstructorScheduleForThisWeekAsync(instructorId);
         public async Task<List<Schedule>> GetSchedulesByYearAndWeekAsync(int year, int week,int classeId)
         {
             return await _scheduleRepo.GetSchedulesByYearAndWeekAsync(year, week,classeId);

@@ -17,18 +17,28 @@ namespace Ecommerce.BLL.Services
         {
             _repo = repo;
         }
-        public Category AddCategory(CategoryDTO category)
+        public Task<List<CategoryDTO>> GetAllCategoriesAsync() => _repo.GetAllCategoriesAsync();
+        public Task<Category> AddCategoryAsync(CategoryDTO category)
         {
-            return _repo.AddCategory(category);
+            return _repo.AddCategoryAsync(category);
         }
-        public List<CategoryDTO> GetAllCategories()=>_repo.GetAllCategories();
-        public CategoryDTO GetCategoryById(int id) => _repo.GetCategoryById(id);
-        public bool DeleteCategory(int id) => _repo.DeleteCategory(id);
-        public bool UpdateCategory(CategoryDTO category) => _repo.UpdateCategory(category);
 
-        //public bool UpdateCategory(Category existingCategory)
-        //{
-        //    throw new NotImplementedException();
-        //}
+        public Task<CategoryDTO> GetCategoryByIdAsync(int id)
+        {
+            return _repo.GetCategoryByIdAsync(id);
+        }
+
+        public Task<bool> DeleteCategoryAsync(int id)
+        {
+            return _repo.DeleteCategoryAsync(id);
+        }
+
+        public Task<bool> UpdateCategoryAsync(CategoryDTO category)
+        {
+            return _repo.UpdateCategoryAsync(category);
+        }
+
+
+
     }
 }

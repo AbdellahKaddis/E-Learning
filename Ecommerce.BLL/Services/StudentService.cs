@@ -1,7 +1,9 @@
 ﻿using Ecommerce.DAL.Repositories;
 using Ecommerce.Models.DTOs;
+using Ecommerce.Models.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -76,7 +78,7 @@ namespace Ecommerce.BLL.Services
         public async Task<StudentDTO> CreateStudentWithUserAsync(CreateUserWithStudentDTO dto)
         {
             int studentRoleId = 4;
-            string _domain = "bitbot.edu";
+            string _domain = "bitbot.ma";
 
             var baseUsername = GenerateBaseUsername(dto.FirstName, dto.LastName);
             var uniqueSuffix = GenerateUniqueSuffix();
@@ -97,7 +99,8 @@ namespace Ecommerce.BLL.Services
             {
                 DateOfBirth = dto.DateOfBirth,
                 ParentId = dto.ParentId,
-                UserId = createdUser.Id
+                UserId = createdUser.Id,
+                ClasseId = dto.ClasseId
             });
 
             var parent = await _parentService.GetParentByIdAsync(dto.ParentId);
@@ -111,58 +114,77 @@ namespace Ecommerce.BLL.Services
         {
             var schoolName = "BitBot";
             var subject = $"Your {schoolName} Student Account Credentials";
-            var logoUrl = "https://static.vecteezy.com/system/resources/thumbnails/008/998/006/small/url-logo-url-letter-url-letter-logo-design-initials-url-logo-linked-with-circle-and-uppercase-monogram-logo-url-typography-for-technology-business-and-real-estate-brand-vector.jpg";
+            var logoUrl = "https://i.imgur.com/luvAL8B.png";
   
             var body = $@"
-    <!DOCTYPE html>
-    <html lang=""en"">
-    <head>
-        <meta charset=""UTF-8"">
-        <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-        <title>Student Credentials</title>
-    </head>
-    <body style=""margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; color: #333;"">
-        <div style=""max-width: 600px; margin: 20px auto; background-color: #f7f9fc; border-radius: 10px; padding: 30px;"">
-            <div style=""text-align: center; margin-bottom: 30px;"">
-                <img src=""{logoUrl}"" alt=""School Logo"" style=""max-width: 200px; height: auto;"">
-            </div>
-
-            <div style=""background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"">
-                <h1 style=""color: #2c3e50; margin-top: 0;"">Welcome, {studentName}!</h1>
-                <p style=""font-size: 16px;"">Your student account has been created. Here are your login credentials:</p>
-
-                <div style=""background: #f8f9fa; padding: 20px; border-radius: 6px; margin: 25px 0;"">
-                    <table>
-                        <tr>
-                            <td style=""padding: 8px 0; width: 100px;""><strong>Email:</strong></td>
-                            <td style=""padding: 8px 0;""><code style=""background: #e9ecef; padding: 4px 8px; border-radius: 4px;"">{email}</code></td>
-                        </tr>
-                        <tr>
-                            <td style=""padding: 8px 0;""><strong>Password:</strong></td>
-                            <td style=""padding: 8px 0;""><code style=""background: #e9ecef; padding: 4px 8px; border-radius: 4px;"">{password}</code></td>
-                        </tr>
-                    </table>
-                </div>
-
-             
-
-                <div style=""margin-top: 25px; padding-top: 25px; border-top: 1px solid #eee;"">
-                    <h3 style=""color: #2c3e50; margin-top: 0;"">Security Notes</h3>
-                    <ul style=""padding-left: 20px; color: #666;"">
-                        <li>This is a temporary password - change it after first login</li>
-                        <li>Never share your credentials with anyone</li>
-                        <li>Contact {"bitbot@bitbot.com"} if you notice suspicious activity</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div style=""text-align: center; margin-top: 30px; color: #666; font-size: 14px;"">
-                <p>© {DateTime.Now.Year} {schoolName}. All rights reserved.</p>
-                <p>{"Technopark"}</p>
-            </div>
-        </div>
-    </body>
-    </html>";
+                <!DOCTYPE html>
+<html lang=""en"">
+<head>
+  <meta charset=""UTF-8"">
+  <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+  <title>Student Credentials</title>
+</head>
+<body style=""margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #1f2937; background-color: #f4f4f4;"">
+  <table role=""presentation"" style=""width: 100%; border-collapse: collapse; background-color: #f4f4f4; padding: 0; margin: 0;"">
+    <tr>
+      <td align=""center"" style=""padding: 40px 10px;"">
+        <table role=""presentation"" style=""width: 100%; max-width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"">
+          <!-- Header -->
+          <tr>
+            <td style=""text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #3b82f6, #1e3a8a);"">
+              <img src='{logoUrl}' alt=""School Logo"" style=""max-width: 180px; height: auto; display: block; margin: 0 auto;"">
+              <h1 style=""color: #ffffff; font-size: 24px; font-weight: 600; margin: 20px 0 10px;"">Welcome, {studentName}!</h1>
+              <p style=""color: #dbeafe; font-size: 16px; margin: 0;"">Your student account is ready to go</p>
+            </td>
+          </tr>
+          <!-- Content -->
+          <tr>
+            <td style=""padding: 40px 20px;"">
+              <p style=""color: #4b5563; font-size: 16px; line-height: 1.6; margin: 0 0 20px;"">
+                We're excited to have you on board! Below are your login credentials to access your student account.
+              </p>
+              <div style=""background: #f8fafc; padding: 20px; border-radius: 8px; margin: 25px 0; border: 1px solid #e5e7eb;"">
+                <table style=""width: 100%; border-collapse: collapse;"">
+                  <tr>
+                    <td style=""padding: 10px 0; width: 100px; color: #1f2937; font-weight: 500;"">Email:</td>
+                    <td style=""padding: 10px 0;""><code style=""background: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-size: 14px; color: #1f2937;"">{email}</code></td>
+                  </tr>
+                  <tr>
+                    <td style=""padding: 10px 0; color: #1f2937; font-weight: 500;"">Password:</td>
+                    <td style=""padding: 10px 0;""><code style=""background: #e5e7eb; padding: 4px 8px; border-radius: 4px; font-size: 14px; color: #1f2937;"">{password}</code></td>
+                  </tr>
+                </table>
+              </div>
+              <a href=""#"" style=""display: inline-block; background-color: #3b82f6; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; transition: background-color 0.2s;"" onmouseover=""this.style.backgroundColor='#2563eb'"" onmouseout=""this.style.backgroundColor='#3b82f6'"">Log In Now</a>
+              <!-- Security Notes -->
+              <div style=""margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;"">
+                <h3 style=""color: #1f2937; font-size: 18px; font-weight: 600; margin: 0 0 15px;"">Security Notes</h3>
+                <ul style=""padding-left: 20px; color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0;"">
+                  <li style=""margin-bottom: 10px;"">This is a temporary password - please change it after your first login.</li>
+                  <li style=""margin-bottom: 10px;"">Never share your credentials with anyone.</li>
+                  <li>Contact <a href=""mailto:bitbot@bitbot.com"" style=""color: #3b82f6; text-decoration: none;"">bitbot@bitbot.com</a> if you notice any suspicious activity.</li>
+                </ul>
+              </div>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style=""background-color: #f8fafc; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;"">
+              <p style=""color: #6b7280; font-size: 14px; margin: 0 0 10px;"">© {DateTime.Now.Year} {schoolName}. All rights reserved.</p>
+              <p style=""color: #6b7280; font-size: 14px; margin: 0;"">Technopark</p>
+              <p style=""color: #6b7280; font-size: 14px; margin: 10px 0 0;"">
+                <a href=""#"" style=""color: #3b82f6; text-decoration: none; margin: 0 10px;"">Privacy Policy</a> |
+                <a href=""#"" style=""color: #3b82f6; text-decoration: none; margin: 0 10px;"">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+            ";
 
             await _emailService.SendEmailAsync(toEmail, subject, body, true);
         }
@@ -188,7 +210,8 @@ namespace Ecommerce.BLL.Services
             var updated = await UpdateStudentAsync(id, new UpdateStudentDTO
             {
                 DateOfBirth = dto.DateOfBirth,
-                ParentId = dto.ParentId
+                ParentId = dto.ParentId,
+                ClasseId = dto.ClassId
             });
 
             return updated;

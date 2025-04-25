@@ -17,9 +17,19 @@ namespace Ecommerce.DAL.Db
         public DbSet<Parent> Parents { get; set; }
 
         public DbSet<Student> Students { get; set; }
+        public DbSet<Lesson> Lesson { get; set; }
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Course> Courses { get; set; }
+        public DbSet<Classe> Classes { get; set; }
+
+        public DbSet<Location> Locations { get; set; }
+
+
+
+        public DbSet<Schedule> Schedule { get; set; }
+        public DbSet<LessonProgress> lessonProgresses { get; set; }
+
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -48,11 +58,32 @@ namespace Ecommerce.DAL.Db
            
 
             modelBuilder.Entity<Course>()
-       .Property(c => c.Created)
-       .HasDefaultValueSql("GETDATE()");
+
+                .Property(c => c.Created)
+                .HasDefaultValueSql("GETDATE()");
+
             modelBuilder.Entity<Course>()
-       .Property(c => c.Updated)
-       .HasDefaultValueSql("GETDATE()");
+              .Property(c => c.Updated)
+              .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<Location>()
+             .HasIndex(l => l.Name)
+             .IsUnique();
+
+            
+
+            modelBuilder.Entity<Location>().HasMany(l => l.Schedules).WithOne(s => s.Location).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Course>().HasMany(c => c.Schedules).WithOne(s => s.Course).OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Classe>().HasMany(c => c.schedules).WithOne(s => s.Classe).OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<Schedule>()
+                .ToTable(tb => tb.HasCheckConstraint("CK_Schedule_Day", "[Day] >= 0 AND [Day] <= 6"));
+
+            modelBuilder.Entity<Schedule>()
+                .ToTable(tb => tb.HasCheckConstraint("CK_Schedule_Week", "[Week] >= 1 AND [Week] <= 52"));
 
 
         }

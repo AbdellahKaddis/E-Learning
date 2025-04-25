@@ -11,6 +11,7 @@ namespace Ecommerce.Models.DTOs
         public DateOnly DateOfBirth { get; set; }
         public int UserId { get; set; }
         public int ParentId { get; set; }
+        public int? ClasseId { get; set; }
     }
 
 }

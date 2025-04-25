@@ -28,6 +28,32 @@ namespace Ecommerce.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Classes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
@@ -71,7 +97,7 @@ namespace Ecommerce.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CourseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CourseDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Duration = table.Column<TimeSpan>(type: "time", nullable: false),
+                    Duration = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ImageCourse = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
@@ -117,6 +143,68 @@ namespace Ecommerce.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Lesson",
+                columns: table => new
+                {
+                    LessonId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    titre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    URL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Duration = table.Column<TimeSpan>(type: "time", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lesson", x => x.LessonId);
+                    table.ForeignKey(
+                        name: "FK_Lesson_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Schedule",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    Week = table.Column<int>(type: "int", nullable: false),
+                    Day = table.Column<int>(type: "int", nullable: false),
+                    ClasseId = table.Column<int>(type: "int", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Schedule", x => x.Id);
+                    table.CheckConstraint("CK_Schedule_Day", "[Day] >= 0 AND [Day] <= 6");
+                    table.CheckConstraint("CK_Schedule_Week", "[Week] >= 1 AND [Week] <= 52");
+                    table.ForeignKey(
+                        name: "FK_Schedule_Classes_ClasseId",
+                        column: x => x.ClasseId,
+                        principalTable: "Classes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Schedule_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Schedule_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Students",
                 columns: table => new
                 {
@@ -124,11 +212,17 @@ namespace Ecommerce.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: false)
+                    ParentId = table.Column<int>(type: "int", nullable: false),
+                    ClasseId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_Classes_ClasseId",
+                        column: x => x.ClasseId,
+                        principalTable: "Classes",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Students_Parents_ParentId",
                         column: x => x.ParentId,
@@ -141,6 +235,34 @@ namespace Ecommerce.DAL.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "lessonProgresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    LessonId = table.Column<int>(type: "int", nullable: false),
+                    LastSecond = table.Column<int>(type: "int", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_lessonProgresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_lessonProgresses_Lesson_LessonId",
+                        column: x => x.LessonId,
+                        principalTable: "Lesson",
+                        principalColumn: "LessonId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_lessonProgresses_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -165,10 +287,51 @@ namespace Ecommerce.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Lesson_CourseId",
+                table: "Lesson",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_lessonProgresses_LessonId",
+                table: "lessonProgresses",
+                column: "LessonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_lessonProgresses_StudentId",
+                table: "lessonProgresses",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Locations_Name",
+                table: "Locations",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Parents_UserId",
                 table: "Parents",
                 column: "UserId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedule_ClasseId",
+                table: "Schedule",
+                column: "ClasseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedule_CourseId",
+                table: "Schedule",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Schedule_LocationId",
+                table: "Schedule",
+                column: "LocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ClasseId",
+                table: "Students",
+                column: "ClasseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_ParentId",
@@ -191,16 +354,31 @@ namespace Ecommerce.DAL.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Courses");
+                name: "lessonProgresses");
+
+            migrationBuilder.DropTable(
+                name: "Schedule");
+
+            migrationBuilder.DropTable(
+                name: "Lesson");
 
             migrationBuilder.DropTable(
                 name: "Students");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Locations");
+
+            migrationBuilder.DropTable(
+                name: "Courses");
+
+            migrationBuilder.DropTable(
+                name: "Classes");
 
             migrationBuilder.DropTable(
                 name: "Parents");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Users");

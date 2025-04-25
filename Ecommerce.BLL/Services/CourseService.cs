@@ -17,17 +17,12 @@ namespace Ecommerce.BLL.Services
         {
             _repo = repo;
         }
-        public bool AddCourse(CreateCourseDTO course)
-        {
-            return _repo.AddCourse(course);
-        }
+        public Task<List<CourseDTO>> GetAllCoursesAsync() => _repo.GetAllCoursesAsync();
+        public Task<CourseDTO> GetCourseByIdAsync(int id) => _repo.GetCourseByIdAsync(id);
+        public Task<bool> AddCourseAsync(CreateCourseDTO course) => _repo.AddCourseAsync(course);
+        public Task<bool> UpdateCourseAsync(int id, UpdateCourseDTO dto) => _repo.UpdateCourseAsync(id, dto);
+        public Task<bool> DeleteCourseAsync(int id) => _repo.DeleteCourseAsync(id);
 
-        public List<CourseDTO> GetAllCourses() => _repo.GetAllCourses();
-        public CourseDTO GetCourseById(int id) => _repo.GetCourseById(id);
-        public bool UpdateCourse(int id, UpdateCourseDTO dto)
-        {
-            return _repo.UpdateCourse(id, dto);
-        }
 
 
     }

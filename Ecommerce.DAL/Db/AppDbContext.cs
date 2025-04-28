@@ -31,6 +31,7 @@ namespace Ecommerce.DAL.Db
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<LessonProgress> lessonProgresses { get; set; }
         public DbSet<ChatMessage> ChatMessages { get; set; }
+        public DbSet<Level> Levels { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options)

@@ -5,7 +5,7 @@
 namespace Ecommerce.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class FixLessonProgress : Migration
+    public partial class New : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

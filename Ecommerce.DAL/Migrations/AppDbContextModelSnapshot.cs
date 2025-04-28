@@ -128,9 +128,8 @@ namespace Ecommerce.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("LevelId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Updated")
                         .ValueGeneratedOnAdd()
@@ -143,6 +142,8 @@ namespace Ecommerce.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("LevelId");
 
                     b.HasIndex("UserId");
 
@@ -237,6 +238,23 @@ namespace Ecommerce.DAL.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("lessonProgresses");
+                });
+
+            modelBuilder.Entity("Ecommerce.Models.Entities.Level", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Levels");
                 });
 
             modelBuilder.Entity("Ecommerce.Models.Entities.Location", b =>
@@ -378,6 +396,9 @@ namespace Ecommerce.DAL.Migrations
                     b.Property<DateOnly>("DateOfBirth")
                         .HasColumnType("date");
 
+                    b.Property<int>("LevelId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ParentId")
                         .HasColumnType("int");
 
@@ -387,6 +408,8 @@ namespace Ecommerce.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClasseId");
+
+                    b.HasIndex("LevelId");
 
                     b.HasIndex("ParentId");
 
@@ -455,6 +478,10 @@ namespace Ecommerce.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Ecommerce.Models.Entities.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId");
+
                     b.HasOne("Ecommerce.Models.Entities.User", "User")
                         .WithMany("Course")
                         .HasForeignKey("UserId")
@@ -462,6 +489,8 @@ namespace Ecommerce.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("Level");
 
                     b.Navigation("User");
                 });
@@ -569,6 +598,12 @@ namespace Ecommerce.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Ecommerce.Models.Entities.Level", "Level")
+                        .WithMany()
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ecommerce.Models.Entities.Parent", "Parent")
                         .WithMany("students")
                         .HasForeignKey("ParentId")
@@ -582,6 +617,8 @@ namespace Ecommerce.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Classe");
+
+                    b.Navigation("Level");
 
                     b.Navigation("Parent");
 

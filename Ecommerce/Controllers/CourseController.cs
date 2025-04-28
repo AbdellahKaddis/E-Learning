@@ -40,7 +40,6 @@ namespace Ecommerce.Api.Controllers
             if (course is null ||
                 string.IsNullOrWhiteSpace(course.CourseName) ||
                 string.IsNullOrWhiteSpace(course.CourseDescription) ||
-                string.IsNullOrWhiteSpace(course.Level) ||
                 string.IsNullOrWhiteSpace(course.ImageCourse))
             {
                 return BadRequest("Invalid Course data.");

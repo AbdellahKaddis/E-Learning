@@ -22,6 +22,7 @@ namespace Ecommerce.DAL.Repositories
         public async Task<List<StudentDTO>> GetAllStudentsAsync()
         {
             return await _context.Students
+                .Include(s => s.Level)
                 .Include(s => s.User)
                 .Include(s => s.Parent)
                     .ThenInclude(p => p.User)
@@ -52,6 +53,11 @@ namespace Ecommerce.DAL.Repositories
                             Email = s.Parent.User.Email,
                             RoleName = s.Parent.User.Role.Name
                         }
+                    },
+                    Level = new LevelDTO
+                    {
+                        Id = s.Level.Id,
+                        Name = s.Level.Name
                     }
                 }).ToListAsync();
         }
@@ -60,6 +66,7 @@ namespace Ecommerce.DAL.Repositories
         {
             return await _context.Students
                 .Include(s => s.User)
+                .Include(s => s.Level)
                 .Include(s => s.Parent)
                     .ThenInclude(p => p.User)
                 .Where(s => s.Id == id)
@@ -90,6 +97,11 @@ namespace Ecommerce.DAL.Repositories
                             Email = s.Parent.User.Email,
                             RoleName = s.Parent.User.Role.Name
                         }
+                    },
+                    Level = new LevelDTO
+                    {
+                        Id = s.Level.Id,
+                        Name = s.Level.Name
                     }
                 }).FirstOrDefaultAsync();
         }
@@ -99,6 +111,7 @@ namespace Ecommerce.DAL.Repositories
             var student = new Student
             {
                 DateOfBirth = dto.DateOfBirth,
+                LevelId = dto.LevelId,
                 UserId = dto.UserId,
                 ParentId = dto.ParentId,
                 ClasseId = dto.ClasseId,
@@ -115,6 +128,8 @@ namespace Ecommerce.DAL.Repositories
 
             if (dto.DateOfBirth.HasValue)
                 student.DateOfBirth = dto.DateOfBirth.Value;
+            if (dto.LevelId.HasValue)
+                student.LevelId = dto.LevelId.Value;
 
             if (dto.ParentId.HasValue)
                 student.ParentId = dto.ParentId.Value;

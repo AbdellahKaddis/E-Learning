@@ -67,6 +67,8 @@ builder.Services.AddScoped<LessonProgressRepository>();
 
 builder.Services.AddScoped<ChatMessageRepository>();
 builder.Services.AddScoped<ChatMessageService>();
+builder.Services.AddScoped<LevelRepository>();
+builder.Services.AddScoped<LevelService>();
 
 //// Configure CORS
 builder.Services.AddCors(options =>

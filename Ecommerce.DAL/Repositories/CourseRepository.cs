@@ -24,13 +24,14 @@ namespace Ecommerce.DAL.Repositories
             return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.User)
+                .Include(c=>c.Level)
                 .Select(course => new CourseDTO
                 {
                     Id = course.Id,
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
                     Duration = course.Duration,
-                    Level = course.Level,
+                    Level = course.Level.Name,
                     ImageCourse = course.ImageCourse,
                     Category = course.Category.CategoryName,
                     Formateur = course.User.FirstName,
@@ -44,6 +45,7 @@ namespace Ecommerce.DAL.Repositories
             return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.User)
+                .Include(c => c.Level)
                 .Where(course => course.Id == id)
                 .Select(course => new CourseDTO
                 {
@@ -51,7 +53,7 @@ namespace Ecommerce.DAL.Repositories
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
                     Duration = course.Duration,
-                    Level = course.Level,
+                    Level = course.Level.Name,
                     ImageCourse = course.ImageCourse,
                     Category = course.Category.CategoryName,
                     Formateur = course.User.FirstName,
@@ -60,14 +62,14 @@ namespace Ecommerce.DAL.Repositories
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<Course> AddCourseAsync(CreateCourseDTO course)
+        public async Task<bool> AddCourseAsync(CreateCourseDTO course)
         {
             var cours = new Course
             {
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
                 Duration = course.Duration,
-                Level = course.Level,
+                LevelId = course.LevelId,
                 ImageCourse = course.ImageCourse,
                 CategoryId = course.CategoryId,
                 UserId = course.UserId,
@@ -76,9 +78,10 @@ namespace Ecommerce.DAL.Repositories
             };
 
             await _context.Courses.AddAsync(cours);
-            await _context.SaveChangesAsync();
-            return cours;
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
         }
+
 
         public async Task<bool> UpdateCourseAsync(int id, UpdateCourseDTO course)
         {
@@ -88,7 +91,7 @@ namespace Ecommerce.DAL.Repositories
             cours.CourseName = course.CourseName;
             cours.CourseDescription = course.CourseDescription;
             cours.Duration = course.Duration;
-            cours.Level = course.Level;
+            cours.LevelId = course.LevelId;
             cours.ImageCourse = course.ImageCourse;
             cours.CategoryId = course.CategoryId;
             cours.UserId = course.UserId;

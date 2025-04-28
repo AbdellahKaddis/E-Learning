@@ -1,6 +1,5 @@
 ﻿using Ecommerce.BLL.Services;
 using Ecommerce.Models.DTOs;
-using Ecommerce.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +10,16 @@ namespace Ecommerce.Api.Controllers
     public class CourseController : ControllerBase
     {
         private readonly CourseService _service;
+        private readonly EmailService _emailService;
+        private readonly UserService _userService;
 
-        public CourseController(CourseService service)
+        public CourseController(CourseService service, EmailService emailService, UserService userService)
         {
             _service = service;
+            _emailService = emailService;
+            _userService = userService;
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CourseDTO>>> GetAllCourses()
         {
@@ -71,7 +75,5 @@ namespace Ecommerce.Api.Controllers
             var success = await _service.DeleteCourseAsync(id);
             return success ? Ok(new { message = "Course deleted successfully" }) : NotFound("No course Found.");
         }
-
-
     }
 }

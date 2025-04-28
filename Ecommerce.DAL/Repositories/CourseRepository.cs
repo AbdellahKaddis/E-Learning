@@ -60,7 +60,7 @@ namespace Ecommerce.DAL.Repositories
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<bool> AddCourseAsync(CreateCourseDTO course)
+        public async Task<Course> AddCourseAsync(CreateCourseDTO course)
         {
             var cours = new Course
             {
@@ -77,7 +77,7 @@ namespace Ecommerce.DAL.Repositories
 
             await _context.Courses.AddAsync(cours);
             await _context.SaveChangesAsync();
-            return true;
+            return cours;
         }
 
         public async Task<bool> UpdateCourseAsync(int id, UpdateCourseDTO course)
@@ -107,7 +107,5 @@ namespace Ecommerce.DAL.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
-
-
     }
 }

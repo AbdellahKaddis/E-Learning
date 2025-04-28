@@ -8,7 +8,6 @@ namespace Ecommerce.Models.DTOs
 {
     public class CreateCourseDTO
     {
-        public int Id { get; set; }
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public TimeSpan Duration { get; set; }

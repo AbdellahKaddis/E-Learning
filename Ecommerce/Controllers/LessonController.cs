@@ -45,6 +45,7 @@ namespace Ecommerce.Api.Controllers
                 titre = Lesson.titre,
                 URL = Lesson.URL,
                 Duration = Lesson.Duration,
+                Description = Lesson.Description,
                 CourseId = Lesson.CourseId
             });
         }
@@ -74,7 +75,8 @@ namespace Ecommerce.Api.Controllers
     titre = lessonAdded.titre,
     URL = lessonAdded.URL,
     Duration = lessonAdded.Duration,
-    CourseId =lessonAdded.CourseId
+    CourseId =lessonAdded.CourseId,
+    Description=lessonAdded.Description
 });
 
         }

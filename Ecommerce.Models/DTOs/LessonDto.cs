@@ -10,6 +10,9 @@ namespace Ecommerce.Models.DTOs
         public int LessonId { get; set; }
         public string titre { get; set; }
         public string? URL { get; set; }
+
+        public string? Description { get; set; }
+
         public TimeSpan Duration { get; set; }
         public string CourseName { get; set; }
     }

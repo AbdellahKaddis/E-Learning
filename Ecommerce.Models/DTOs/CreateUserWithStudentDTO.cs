@@ -15,8 +15,12 @@ namespace Ecommerce.Models.DTOs
         // Student info
         public DateOnly DateOfBirth { get; set; }
         public int ParentId { get; set; }
+<<<<<<< HEAD
         public int ClasseId { get; set; }
         public int LevelId { get; set; }
+=======
+        public int? ClasseId { get; set; }
+>>>>>>> aaec8d4816efbb6e32d967fa847ef4a5999e8e7c
     }
 
 }

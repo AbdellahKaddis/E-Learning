@@ -65,23 +65,24 @@ namespace Ecommerce.DAL.Repositories
                 }).FirstOrDefaultAsync();
         }
 
-        public async Task<int> AddScheduleAsync(CreateScheduleDTO dto)
+        public async Task AddSchedulesAsync(List<CreateScheduleDTO> schedules)
         {
-            var schedule = new Schedule
+            var scheduleEntities = schedules.Select(s => new Schedule
             {
-                Year = dto.Year,
-                Week = dto.Week,
-                Day = dto.Day,
-                ClasseId = dto.ClasseId,
-                LocationId = dto.LocationId,
-                CourseId = dto.CourseId,
-                StartTime = dto.StartTime,
-                EndTime = dto.EndTime
-            };
-            _context.Schedule.Add(schedule);
+                Year = s.Year,
+                Week = s.Week,
+                Day = s.Day,
+                ClasseId = s.ClasseId,
+                LocationId = s.LocationId,
+                CourseId = s.CourseId,
+                StartTime = s.StartTime,
+                EndTime = s.EndTime
+            }).ToList(); 
+
+            await _context.Schedule.AddRangeAsync(scheduleEntities);
             await _context.SaveChangesAsync();
-            return schedule.Id;
         }
+
 
         public async Task<bool> UpdateScheduleAsync(int id, UpdateScheduleDTO dto)
         {
@@ -149,6 +150,67 @@ namespace Ecommerce.DAL.Repositories
                 StartTime = s.StartTime,
                 EndTime = s.EndTime
             }).ToList();
+        }
+
+        public async Task<List<ScheduleDTO>> GetInstructorScheduleForThisWeekAsync(int instructorId)
+        {
+            var today = DateTime.UtcNow;
+            var calendar = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+            int currentWeek = calendar.GetWeekOfYear(today, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+            int currentYear = today.Year;
+
+
+
+            // Get schedule entries for that instructor, current year & week
+            var schedules = await _context.Schedule
+                .Include(s => s.Course).ThenInclude(c => c.User)
+                .Include(s => s.Location)
+                .Include(s => s.Classe)
+                .Where(s => s.Course.UserId == instructorId && s.Year == currentYear && s.Week == currentWeek)
+                .ToListAsync();
+
+            // Map to DTOs (assuming you have ScheduleDTO with properties)
+            return schedules.Select(s => new ScheduleDTO
+            {
+                Id = s.Id,
+                Year = s.Year,
+                Week = s.Week,
+                Day = s.Day,
+                ClasseName = s.Classe.Name,
+                LocationName = s.Location.Name,
+                CourseName = s.Course.CourseName,
+                FormateurName = $"{s.Course.User.FirstName} {s.Course.User.LastName}",
+                StartTime = s.StartTime,
+                EndTime = s.EndTime
+            }).ToList();
+        }
+        public async Task<List<Schedule>> GetSchedulesByYearAndWeekAsync(int year, int week, int classeId)
+        {
+            return await _context.Schedule
+                .Include(s => s.Classe)
+                .Include(s => s.Location)
+                .Include(s => s.Course)
+                    .ThenInclude(c => c.User)
+                .Where(s => s.Year == year && s.Week == week && s.ClasseId == classeId)
+                .OrderBy(s => s.Day)
+                .ThenBy(s => s.StartTime)
+                .ToListAsync();
+        }
+
+        public async Task<List<StudentWithParentDTO>> GetStudentsWithTheirParentsByClassId(int id)
+        {
+            return await _context.Students
+                    .Include(s => s.User)
+                    .Include(s => s.Parent)
+                    .ThenInclude(s => s.User)
+                    .Where(s => s.ClasseId == id)
+                    .Select(s => new StudentWithParentDTO
+                    {
+                        StudentFullName = $"{s.User.FirstName} {s.User.LastName}",
+                        ParentFullName = $"{s.Parent.User.FirstName} {s.Parent.User.LastName}",
+                        ParentEmail = s.Parent.User.Email
+                    })
+                    .ToListAsync();
         }
 
     }

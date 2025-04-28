@@ -212,6 +212,10 @@ namespace Ecommerce.BLL.Services
             {
                 DateOfBirth = dto.DateOfBirth,
                 ParentId = dto.ParentId,
+<<<<<<< HEAD
+=======
+                ClasseId = dto.ClassId
+>>>>>>> aaec8d4816efbb6e32d967fa847ef4a5999e8e7c
             });
 
             return updated;

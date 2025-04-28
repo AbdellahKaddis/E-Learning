@@ -12,7 +12,7 @@ namespace Ecommerce.Models.DTOs
         public int UserId { get; set; }
         public int LevelId { get; set; }
         public int ParentId { get; set; }
-        public int ClasseId { get; set; }
+        public int? ClasseId { get; set; }
     }
 
 }

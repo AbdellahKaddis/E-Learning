@@ -6,7 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ecommerce.BLL.Services;
 using Ecommerce.DAL.Repositories;
+<<<<<<< HEAD
 using Ecommerce.DAL.SignarHub;
+=======
+using QuestPDF.Infrastructure;
+>>>>>>> aaec8d4816efbb6e32d967fa847ef4a5999e8e7c
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,8 +61,6 @@ builder.Services.AddScoped<ClasseService>();
 builder.Services.AddScoped<LocationService>();
 builder.Services.AddScoped<LocationRepository>();
 
-builder.Services.AddScoped<EnrollementService>();
-builder.Services.AddScoped<EnrollementRepository>();
 
 builder.Services.AddScoped<ScheduleService>();
 builder.Services.AddScoped<ScheduleRepository>();
@@ -99,6 +101,9 @@ builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializ
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+QuestPDF.Settings.License = LicenseType.Community;
+
 
 var app = builder.Build();
 

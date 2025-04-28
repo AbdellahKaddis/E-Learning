@@ -134,6 +134,9 @@ namespace Ecommerce.DAL.Repositories
             if (dto.ParentId.HasValue)
                 student.ParentId = dto.ParentId.Value;
 
+            if (dto.ClasseId.HasValue)
+                student.ClasseId = dto.ClasseId.Value;
+
             await _context.SaveChangesAsync();
             return true;
         }

@@ -15,7 +15,7 @@ namespace Ecommerce.Models.Entities
 
         public int ParentId {  get; set; }
         public Parent Parent { get; set; }
-        public int ClasseId {  get; set; }
+        public int ? ClasseId {  get; set; }
         public Classe Classe { get; set; }
         public int LevelId { get; set; }
         public Level? Level { get; set; }

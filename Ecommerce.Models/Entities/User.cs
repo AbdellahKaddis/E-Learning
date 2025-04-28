@@ -27,6 +27,6 @@ namespace Ecommerce.Models.Entities
 
         public Student Student { get; set; }
 
-        public List<Enrollement> Enrollements { get; set;}
+     
     }
 }

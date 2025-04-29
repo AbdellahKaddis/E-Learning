@@ -30,6 +30,8 @@ namespace Ecommerce.DAL.Db
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<LessonProgress> lessonProgresses { get; set; }
 
+        public DbSet<Level> Levels { get; set; }
+
         public DbSet<Instructor> Instructors { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

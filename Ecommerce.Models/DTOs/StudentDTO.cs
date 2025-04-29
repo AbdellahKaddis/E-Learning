@@ -10,8 +10,9 @@ namespace Ecommerce.Models.DTOs
     {
         public int Id { get; set; }
         public DateOnly DateOfBirth { get; set; }
+        public string LevelName  { get; set; }
+        public string ClassName { get; set; }
 
-        public int UserId { get; set; }
         public UserDTO User { get; set; }
 
         public int ParentId { get; set; }

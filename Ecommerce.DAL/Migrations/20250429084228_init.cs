@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ecommerce.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +38,19 @@ namespace Ecommerce.DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Classes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Levels",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Levels", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -98,7 +111,7 @@ namespace Ecommerce.DAL.Migrations
                     CourseName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CourseDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Duration = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Level = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LevelId = table.Column<int>(type: "int", nullable: true),
                     ImageCourse = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -114,6 +127,11 @@ namespace Ecommerce.DAL.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Courses_Levels_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Levels",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Courses_Users_UserId",
                         column: x => x.UserId,
@@ -239,7 +257,8 @@ namespace Ecommerce.DAL.Migrations
                     DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ParentId = table.Column<int>(type: "int", nullable: false),
-                    ClasseId = table.Column<int>(type: "int", nullable: true)
+                    ClasseId = table.Column<int>(type: "int", nullable: true),
+                    LevelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -248,6 +267,11 @@ namespace Ecommerce.DAL.Migrations
                         name: "FK_Students_Classes_ClasseId",
                         column: x => x.ClasseId,
                         principalTable: "Classes",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Students_Levels_LevelId",
+                        column: x => x.LevelId,
+                        principalTable: "Levels",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Students_Parents_ParentId",
@@ -306,6 +330,11 @@ namespace Ecommerce.DAL.Migrations
                 name: "IX_Courses_CategoryId",
                 table: "Courses",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_LevelId",
+                table: "Courses",
+                column: "LevelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_UserId",
@@ -378,6 +407,11 @@ namespace Ecommerce.DAL.Migrations
                 column: "ClasseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Students_LevelId",
+                table: "Students",
+                column: "LevelId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Students_ParentId",
                 table: "Students",
                 column: "ParentId");
@@ -426,6 +460,9 @@ namespace Ecommerce.DAL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "Levels");
 
             migrationBuilder.DropTable(
                 name: "Users");

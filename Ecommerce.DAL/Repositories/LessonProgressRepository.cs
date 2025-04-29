@@ -99,7 +99,6 @@ namespace Ecommerce.DAL.Repositories
         {
             var lesPro = await _context.lessonProgresses.FindAsync(id);
             if (lesPro == null) return false;
-
             _context.lessonProgresses.Remove(lesPro);
             await _context.SaveChangesAsync();
             return true;

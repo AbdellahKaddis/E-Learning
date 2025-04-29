@@ -22,6 +22,7 @@ namespace Ecommerce.DAL.Repositories
         public async Task<List<StudentDTO>> GetAllStudentsAsync()
         {
             return await _context.Students
+                .Include(s => s.Level)
                 .Include(s => s.User)
                 .Include(s => s.Parent)
                     .ThenInclude(p => p.User)
@@ -29,7 +30,7 @@ namespace Ecommerce.DAL.Repositories
                 {
                     Id = s.Id,
                     DateOfBirth = s.DateOfBirth,
-                    UserId = s.UserId,
+     
                     ParentId = s.ParentId,
                     User = new UserDTO
                     {
@@ -43,6 +44,8 @@ namespace Ecommerce.DAL.Repositories
                     {
                         Id = s.Parent.Id,
                         Address = s.Parent.Address,
+                        Telephone = s.Parent.Telephone,
+                        Cin = s.Parent.Cin,
                         UserId = s.Parent.UserId,
                         User = new UserDTO
                         {
@@ -52,7 +55,9 @@ namespace Ecommerce.DAL.Repositories
                             Email = s.Parent.User.Email,
                             RoleName = s.Parent.User.Role.Name
                         }
-                    }
+                    },
+                    LevelName = s.Level.Name,
+                    ClassName = s.Classe.Name
                 }).ToListAsync();
         }
 
@@ -60,6 +65,8 @@ namespace Ecommerce.DAL.Repositories
         {
             return await _context.Students
                 .Include(s => s.User)
+                .Include(s => s.Level)
+                 .Include(s => s.Classe)
                 .Include(s => s.Parent)
                     .ThenInclude(p => p.User)
                 .Where(s => s.Id == id)
@@ -67,7 +74,6 @@ namespace Ecommerce.DAL.Repositories
                 {
                     Id = s.Id,
                     DateOfBirth = s.DateOfBirth,
-                    UserId = s.UserId,
                     ParentId = s.ParentId,
                     User = new UserDTO
                     {
@@ -81,6 +87,8 @@ namespace Ecommerce.DAL.Repositories
                     {
                         Id = s.Parent.Id,
                         Address = s.Parent.Address,
+                        Telephone = s.Parent.Telephone,
+                        Cin = s.Parent.Cin,
                         UserId = s.Parent.UserId,
                         User = new UserDTO
                         {
@@ -90,7 +98,9 @@ namespace Ecommerce.DAL.Repositories
                             Email = s.Parent.User.Email,
                             RoleName = s.Parent.User.Role.Name
                         }
-                    }
+                    },
+                    LevelName = s.Level.Name,
+                    ClassName = s.Classe.Name
                 }).FirstOrDefaultAsync();
         }
 
@@ -99,6 +109,7 @@ namespace Ecommerce.DAL.Repositories
             var student = new Student
             {
                 DateOfBirth = dto.DateOfBirth,
+                LevelId = dto.LevelId,
                 UserId = dto.UserId,
                 ParentId = dto.ParentId,
                 ClasseId = dto.ClasseId,
@@ -115,6 +126,8 @@ namespace Ecommerce.DAL.Repositories
 
             if (dto.DateOfBirth.HasValue)
                 student.DateOfBirth = dto.DateOfBirth.Value;
+            if (dto.LevelId.HasValue)
+                student.LevelId = dto.LevelId.Value;
 
             if (dto.ParentId.HasValue)
                 student.ParentId = dto.ParentId.Value;

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.DTOs
 {
-    public class CreateClassDTO
+    public class LevelDTO
     {
-        public string Name { get; set; }
+        public int ? Id { get; set; }
+        public string? Name { get; set; }
     }
 }

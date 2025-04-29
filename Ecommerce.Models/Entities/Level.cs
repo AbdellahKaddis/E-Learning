@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ecommerce.Models.DTOs
+namespace Ecommerce.Models.Entities
 {
-    public class CreateClassDTO
+    public class Level
     {
+        public int Id { get; set; }
         public string Name { get; set; }
     }
 }

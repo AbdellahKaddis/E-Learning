@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.DTOs
 {
-    public class CreateClassDTO
+    public class CreateLevelDTO
     {
         public string Name { get; set; }
     }

@@ -6,7 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Ecommerce.BLL.Services;
 using Ecommerce.DAL.Repositories;
+
+
+
 using QuestPDF.Infrastructure;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +37,8 @@ builder.Services.AddAuthentication(options =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
+
+builder.Services.AddSignalR();
 
 
 
@@ -61,20 +67,27 @@ builder.Services.AddScoped<ScheduleRepository>();
 builder.Services.AddScoped<LessonProgressService>();
 builder.Services.AddScoped<LessonProgressRepository>();
 
+
 builder.Services.AddScoped<InstructorRepository>();
 builder.Services.AddScoped<InstructorService>();
+
+builder.Services.AddScoped<LevelRepository>();
+builder.Services.AddScoped<LevelService>();
+
 
 //// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend",
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:4200")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
-        });
+        policy => policy.WithOrigins(
+                            "http://localhost:4200",
+                            "http://localhost:57671"
+                        )
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
 });
+
 
 
 
@@ -100,6 +113,7 @@ var app = builder.Build();
 
 app.UseCors("AllowFrontend");
 app.UseDeveloperExceptionPage(); 
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

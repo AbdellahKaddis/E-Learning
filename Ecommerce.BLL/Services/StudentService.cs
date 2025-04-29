@@ -99,6 +99,7 @@ namespace Ecommerce.BLL.Services
             {
                 DateOfBirth = dto.DateOfBirth,
                 ParentId = dto.ParentId,
+                LevelId = dto.LevelId,
                 UserId = createdUser.Id,
                 ClasseId = dto.ClasseId
             });
@@ -199,7 +200,7 @@ namespace Ecommerce.BLL.Services
             var student = await GetStudentByIdAsync(id);
             if (student == null) return null;
 
-            await _userService.UpdateUserAsync(student.UserId, new UpdateUserDTO
+            await _userService.UpdateUserAsync(student.User.Id, new UpdateUserDTO
             {
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
@@ -211,7 +212,9 @@ namespace Ecommerce.BLL.Services
             {
                 DateOfBirth = dto.DateOfBirth,
                 ParentId = dto.ParentId,
+                LevelId = dto.LevelId,
                 ClasseId = dto.ClassId
+
             });
 
             return updated;
@@ -225,7 +228,7 @@ namespace Ecommerce.BLL.Services
             bool isDeleted = await _studentRepo.DeleteStudentAsync(id);
             if (isDeleted)
             {
-                return await _userService.DeleteUserAsync(student.UserId);
+                return await _userService.DeleteUserAsync(student.User.Id);
             }
 
             return false;

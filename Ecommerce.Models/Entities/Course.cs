@@ -12,7 +12,10 @@ namespace Ecommerce.Models.Entities
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public string Duration { get; set; }
-        public string Level { get; set; }
+
+        public int? LevelId { get; set; }
+        public Level? Level { get; set; }
+
         public string ImageCourse { get; set; }
         public int CategoryId { get; set; }
         public Category? Category { get; set; }

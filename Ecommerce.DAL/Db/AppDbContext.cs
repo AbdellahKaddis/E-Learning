@@ -30,7 +30,7 @@ namespace Ecommerce.DAL.Db
         public DbSet<Schedule> Schedule { get; set; }
         public DbSet<LessonProgress> lessonProgresses { get; set; }
 
-
+        public DbSet<Instructor> Instructors { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
@@ -85,7 +85,13 @@ namespace Ecommerce.DAL.Db
             modelBuilder.Entity<Schedule>()
                 .ToTable(tb => tb.HasCheckConstraint("CK_Schedule_Week", "[Week] >= 1 AND [Week] <= 52"));
 
+            modelBuilder.Entity<Instructor>()
+            .HasIndex(i => i.Cin)
+            .IsUnique();
 
+            modelBuilder.Entity<Parent>()
+.HasIndex(p => p.Cin)
+.IsUnique();
         }
     }
 }

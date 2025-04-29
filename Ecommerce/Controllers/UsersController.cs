@@ -53,19 +53,19 @@ namespace Ecommerce.Api.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserDTO>> AddUser(CreateUserDTO dto) 
+        public async Task<ActionResult<UserDTO>> AddUser(CreateUserDTOWithoutRoleId dto) 
         {
-            //if (string.IsNullOrWhiteSpace(dto.DateOfBirth.ToString()))
-            //    return BadRequest(new { error = "DateOfBirth is required." });
 
-            //if (!UserService.IsValidDate(dto.DateOfBirth.ToString()))
-            //    return BadRequest(new { error = "Invalid Date Format." });
-
-            if (dto.RoleId != 1 && dto.RoleId != 2)
-                return BadRequest(new { error = "Invalid RoleId." });
             try
             {
-                var createdUser = await _service.AddUserAsync(dto);
+                var createdUser = await _service.AddUserAsync(new CreateUserDTO
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Email = dto.Email,
+                    Password = dto.Password,
+                    RoleId = 1 // 1 for admin
+                });
                 return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
             }
             catch (ArgumentException ex)

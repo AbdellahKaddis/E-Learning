@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.DTOs
 {
-    public class ParentDTO
+    public class InstructorDTO
     {
         public int Id { get; set; }
         public string Address { get; set; }
         public string Cin { get; set; }
         public string Telephone { get; set; }
-        public int UserId { get; set; }
+        public string Specialite { get; set; }
         public UserDTO User { get; set; }
     }
 }

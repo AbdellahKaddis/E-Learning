@@ -61,6 +61,9 @@ builder.Services.AddScoped<ScheduleRepository>();
 builder.Services.AddScoped<LessonProgressService>();
 builder.Services.AddScoped<LessonProgressRepository>();
 
+builder.Services.AddScoped<InstructorRepository>();
+builder.Services.AddScoped<InstructorService>();
+
 //// Configure CORS
 builder.Services.AddCors(options =>
 {

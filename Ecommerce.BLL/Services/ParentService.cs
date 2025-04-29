@@ -32,6 +32,8 @@ namespace Ecommerce.BLL.Services
             {
                 Id = insertedId,
                 Address = parent?.Address ?? string.Empty,
+                Cin = parent?.Cin ?? string.Empty,
+                Telephone = parent?.Telephone ?? string.Empty,
                 UserId = parent?.UserId ?? 0,
                 User = parent?.User
             };
@@ -54,7 +56,9 @@ namespace Ecommerce.BLL.Services
             var createdParent = await this.AddParentAsync(new CreateParentDTO
             {
                 UserId = createdUser.Id,
-                Address = dto.Address
+                Address = dto.Address,
+                 Cin = dto.Cin,
+                Telephone = dto.Telephone,
             });
 
             return new ParentDTO
@@ -62,6 +66,8 @@ namespace Ecommerce.BLL.Services
                 Id = createdParent.Id,
                 UserId = createdParent.UserId,
                 Address = createdParent.Address,
+                Cin = createdParent.Cin,
+                Telephone = createdParent.Telephone,
                 User = new UserDTO
                 {
                     Id = createdUser.Id,
@@ -96,6 +102,8 @@ namespace Ecommerce.BLL.Services
             var updatedParent = await this.UpdateParentAsync(id, new UpdateParentDTO
             {
                 Address = dto.Address,
+                Cin = dto.Cin,
+                Telephone = dto.Telephone,
             });
             return updatedParent;
 

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Ecommerce.Models.DTOs
 {
-    public class UpdateParentDTO
+    public class UpdateInstructorDTO
     {
-        public string? Address { get; set; }
         public string? Cin { get; set; }
         public string? Telephone { get; set; }
+        public string? Address { get; set; }
+        public string? Specialite { get; set; }
     }
 }

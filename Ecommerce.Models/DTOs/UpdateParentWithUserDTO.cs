@@ -16,6 +16,8 @@ namespace Ecommerce.Models.DTOs
    public string? Password { get; set; }
     // Parent fields
     public string? Address { get; set; }
-}
+        public string? Cin { get; set; }
+        public string? Telephone { get; set; }
+    }
 
 }

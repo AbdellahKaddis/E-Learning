@@ -25,6 +25,8 @@ namespace Ecommerce.DAL.Repositories
                 {
                     Id = p.Id,
                     Address = p.Address,
+                    Cin = p.Cin,
+                    Telephone = p.Telephone,
                     UserId = p.UserId,
                     User = new UserDTO
                     {
@@ -46,6 +48,8 @@ namespace Ecommerce.DAL.Repositories
                 {
                     Id = p.Id,
                     Address = p.Address,
+                    Cin = p.Cin,
+                    Telephone = p.Telephone,
                     UserId = p.UserId,
                     User = new UserDTO
                     {
@@ -64,6 +68,8 @@ namespace Ecommerce.DAL.Repositories
             var parent = new Parent
             {
                 Address = dto.Address,
+                Cin = dto.Cin,
+                Telephone = dto.Telephone,
                 UserId = dto.UserId
             };
             _context.Parents.Add(parent);
@@ -78,6 +84,10 @@ namespace Ecommerce.DAL.Repositories
 
             if (!string.IsNullOrWhiteSpace(dto.Address))
                 parent.Address = dto.Address;
+            if (!string.IsNullOrWhiteSpace(dto.Cin))
+                parent.Cin = dto.Cin;
+            if (!string.IsNullOrWhiteSpace(dto.Telephone))
+                parent.Telephone = dto.Telephone;
 
             await _context.SaveChangesAsync();
             return true;

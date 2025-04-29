@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250428091343_initialCreate")]
+    [Migration("20250428115235_initialCreate")]
     partial class initialCreate
     {
         /// <inheritdoc />
@@ -116,6 +116,44 @@ namespace Ecommerce.DAL.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("Ecommerce.Models.Entities.Instructor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Cin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Specialite")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Cin")
+                        .IsUnique();
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Instructors");
+                });
+
             modelBuilder.Entity("Ecommerce.Models.Entities.Lesson", b =>
                 {
                     b.Property<int>("LessonId")
@@ -208,10 +246,21 @@ namespace Ecommerce.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Cin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Telephone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Cin")
+                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -391,6 +440,17 @@ namespace Ecommerce.DAL.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Ecommerce.Models.Entities.Instructor", b =>
+                {
+                    b.HasOne("Ecommerce.Models.Entities.User", "User")
+                        .WithOne("Instructor")
+                        .HasForeignKey("Ecommerce.Models.Entities.Instructor", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Ecommerce.Models.Entities.Lesson", b =>
                 {
                     b.HasOne("Ecommerce.Models.Entities.Course", "Course")
@@ -532,6 +592,9 @@ namespace Ecommerce.DAL.Migrations
             modelBuilder.Entity("Ecommerce.Models.Entities.User", b =>
                 {
                     b.Navigation("Course");
+
+                    b.Navigation("Instructor")
+                        .IsRequired();
 
                     b.Navigation("Parent")
                         .IsRequired();

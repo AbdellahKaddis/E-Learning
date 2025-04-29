@@ -8,7 +8,6 @@ namespace Ecommerce.Models.Entities
 {
     public class User
     {
-
         public int Id { get; set; }
 
         public string FirstName { get; set; }
@@ -26,6 +25,8 @@ namespace Ecommerce.Models.Entities
         public Parent Parent { get; set; }
 
         public Student Student { get; set; }
+
+        public Instructor Instructor { get; set; }
 
      
     }

@@ -123,12 +123,37 @@ namespace Ecommerce.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Instructors",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cin = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Specialite = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Instructors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Instructors_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Parents",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Cin = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Telephone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -288,6 +313,18 @@ namespace Ecommerce.DAL.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Instructors_Cin",
+                table: "Instructors",
+                column: "Cin",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Instructors_UserId",
+                table: "Instructors",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Lesson_CourseId",
                 table: "Lesson",
                 column: "CourseId");
@@ -306,6 +343,12 @@ namespace Ecommerce.DAL.Migrations
                 name: "IX_Locations_Name",
                 table: "Locations",
                 column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parents_Cin",
+                table: "Parents",
+                column: "Cin",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -354,6 +397,9 @@ namespace Ecommerce.DAL.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Instructors");
+
             migrationBuilder.DropTable(
                 name: "lessonProgresses");
 

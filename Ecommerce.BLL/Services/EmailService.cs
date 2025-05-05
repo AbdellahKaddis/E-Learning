@@ -22,7 +22,66 @@ namespace Ecommerce.BLL.Services
             _configuration = configuration;
         }
 
+        public async Task SendOtpEmailAsync(string email, string otp)
+        {
+            var message = new MimeMessage();
+            message.From.Add(MailboxAddress.Parse(_configuration["Smtp:Username"]));
+            message.To.Add(MailboxAddress.Parse(email));
+            message.Subject = "Your One-Time Password (OTP)"; // Hardcoded subject
 
+            var builder = new BodyBuilder();
+
+            // HTML Template
+            builder.HtmlBody = $@"
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <style>
+            body {{ font-family: Arial, sans-serif; margin: 0; padding: 20px; }}
+            .container {{ max-width: 600px; margin: 0 auto; background: #f7f7f7; padding: 30px; }}
+            .otp-display {{ 
+                font-size: 32px; 
+                letter-spacing: 4px; 
+                padding: 20px; 
+                background: #ffffff; 
+                text-align: center; 
+                margin: 20px 0;
+                border-radius: 8px;
+            }}
+            .warning {{ color: #666; font-size: 14px; }}
+        </style>
+    </head>
+    <body>
+        <div class=""container"">
+            <h2>Password Reset Verification</h2>
+            <div class=""otp-display"">{otp}</div>
+            <p class=""warning"">
+                This OTP is valid for 10 minutes. Do not share this code with anyone.
+            </p>
+        </div>
+    </body>
+    </html>";
+
+            // Plain text fallback
+            builder.TextBody = $"Your OTP is: {otp}\nValid for 10 minutes. Do not share this code.";
+
+            message.Body = builder.ToMessageBody();
+
+            using var smtp = new SmtpClient();
+            smtp.ServerCertificateValidationCallback = (s, c, h, e) => true; // Dev only
+
+            await smtp.ConnectAsync(
+                _configuration["Smtp:Host"],
+                int.Parse(_configuration["Smtp:Port"]),
+                SecureSocketOptions.StartTls);
+
+            await smtp.AuthenticateAsync(
+                _configuration["Smtp:Username"],
+                _configuration["Smtp:Password"]);
+
+            await smtp.SendAsync(message);
+            await smtp.DisconnectAsync(true);
+        }
         public async Task SendEmailAsync(string toEmail, string subject, string body, bool isBodyHtml = false)
         {
             var email = new MimeMessage();

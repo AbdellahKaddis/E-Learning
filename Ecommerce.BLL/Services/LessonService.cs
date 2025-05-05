@@ -26,5 +26,7 @@ namespace Ecommerce.BLL.Services
 
         public bool DeleteLesson(int id) => _repo.DeleteLesson(id);
         public Lesson UpdateLesson(int id, updateLessonDto l) => _repo.UpdateLesson(id, l);
+        public async Task<List<LessonDto>> getCourseLessonsByCourseId(int courseId)
+            => await _repo.getCourseLessonsByCourseId(courseId);
     }
 }

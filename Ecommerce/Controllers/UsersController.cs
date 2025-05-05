@@ -10,9 +10,12 @@ using Ecommerce.DAL.Db;
 using Ecommerce.DAL.Repositories;
 using Ecommerce.Models.DTOs;
 using Ecommerce.Models.Entities;
+using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using ForgotPasswordRequest = Ecommerce.Models.DTOs.ForgotPasswordRequest;
+using ResetPasswordRequest = Ecommerce.Models.DTOs.ResetPasswordRequest;
 
 namespace Ecommerce.Api.Controllers
 {
@@ -109,7 +112,102 @@ namespace Ecommerce.Api.Controllers
             return success ? Ok("Deleted successfully") : NotFound("No user found.");
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid request.");
+
+            // Always return generic response to prevent email enumeration
+            var response = Ok("If your email is registered, you’ll receive an OTP shortly.");
+
+            var user = await _service.GetUserByEmailAsync(request.Email);
+            if (user == null) return response;
+
+            // Generate and hash OTP
+            string otp = OtpService.GenerateOtp();
+            string hashedOtp = OtpService.HashOtp(otp);
+
+            // Save OTP to user record
+            user.OtpHash = hashedOtp;
+            user.OtpExpiry = DateTime.UtcNow.AddMinutes(10); // 10-minute expiry
+            user.OtpUsed = false;
+            await _service.UpdateUserAsync(user);
+
+            // Send OTP via email (use a background job in production)
+            await _emailService.SendOtpEmailAsync(user.Email, otp);
+
+            return response;
+        }
         
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyOtp(VerifyOtpRequest request)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid request.");
+
+            var user = await _service.GetUserByEmailAsync(request.Email);
+            if (user == null)
+                return BadRequest("Invalid request."); 
+
+            // Check OTP validity
+            if ((bool)user.OtpUsed || user.OtpExpiry < DateTime.UtcNow)
+                return BadRequest("OTP expired or already used.");
+
+            // Verify OTP hash
+            string hashedInputOtp = OtpService.HashOtp(request.Otp);
+            if (user.OtpHash != hashedInputOtp)
+                return BadRequest("Invalid OTP.");
+
+            // Generate a secure reset token
+            string resetToken = GenerateResetToken();
+
+            // Store the reset token in the user record
+            user.ResetToken = resetToken;
+            user.ResetTokenExpiry = DateTime.UtcNow.AddMinutes(10); // 10-minute expiry
+            user.OtpUsed = true; // Invalidate OTP after successful verification
+            await _service.UpdateUserAsync(user);
+
+            return Ok(new { ResetToken = resetToken });
+        }
+        
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid request.");
+
+            // Find user by email
+            var user = await _service.GetUserByEmailAsync(request.Email);
+            if (user == null)
+                return BadRequest("Invalid request.");
+
+            // Validate reset token
+            if (user.ResetToken != request.ResetToken || user.ResetTokenExpiry < DateTime.UtcNow)
+                return BadRequest("Invalid or expired reset token.");
+
+            // Hash the new password
+            string newPasswordHash = HashPassword(request.NewPassword);
+
+            // Update the user's password and invalidate the reset token
+            user.Password = newPasswordHash;
+            user.ResetToken = null;
+            user.ResetTokenExpiry = null;
+            await _service.UpdateUserAsync(user);
+
+            return Ok("Password reset successfully.");
+        }
+
+        // Example password hashing with BCrypt
+        private string HashPassword(string password)
+        {
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+        private string GenerateResetToken()
+        {
+            return Guid.NewGuid().ToString();
+        }
         private string GenerateJwtToken(User user)
         {
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);

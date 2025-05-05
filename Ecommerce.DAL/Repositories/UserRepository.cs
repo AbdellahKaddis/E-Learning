@@ -2,6 +2,7 @@
 using Ecommerce.Models.DTOs;
 using Ecommerce.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Crypto.Macs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -59,7 +60,12 @@ namespace Ecommerce.DAL.Repositories
                     Email = u.Email,
                     Password = u.Password,
                     RoleId = u.RoleId,
-                    Role = u.Role
+                    Role = u.Role,
+                    OtpHash = u.OtpHash,
+                    OtpExpiry = u.OtpExpiry,
+                    OtpUsed = u.OtpUsed,
+                    ResetToken = u.ResetToken,
+                    ResetTokenExpiry = u.ResetTokenExpiry
                 }).FirstOrDefaultAsync(); 
         }
 
@@ -125,5 +131,11 @@ namespace Ecommerce.DAL.Repositories
                     Name = r.Name,
                 }).FirstOrDefaultAsync(r => r.Id == id);
         }
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

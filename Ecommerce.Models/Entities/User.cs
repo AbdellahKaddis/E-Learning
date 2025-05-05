@@ -29,6 +29,11 @@ namespace Ecommerce.Models.Entities
 
         public Instructor Instructor { get; set; }
 
-     
+        //fields for reset password
+        public string? OtpHash { get; set; }      // Hashed OTP
+        public DateTime? OtpExpiry { get; set; }
+        public bool? OtpUsed { get; set; }
+        public string? ResetToken { get; set; }   // For password reset
+        public DateTime? ResetTokenExpiry { get; set; }
     }
 }

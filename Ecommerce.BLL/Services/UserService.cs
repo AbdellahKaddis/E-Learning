@@ -70,6 +70,10 @@ namespace Ecommerce.BLL.Services
             return DateTime.TryParse(dateString, out _);
         }
 
-        public async Task<bool> IsRoleExistsAsync(int id) => await _repo.IsRoleExistsAsync(id); 
+        public async Task<bool> IsRoleExistsAsync(int id) => await _repo.IsRoleExistsAsync(id);
+        public async Task UpdateUserAsync(User user)
+        {
+            await _repo.UpdateUserAsync(user);
+        }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ecommerce.DAL.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250430074939_init")]
+    [Migration("20250505102157_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -194,6 +194,12 @@ namespace Ecommerce.DAL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<int>("LastSecond")
                         .HasColumnType("int");
 
@@ -207,6 +213,8 @@ namespace Ecommerce.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.HasIndex("LessonId");
 
@@ -430,9 +438,24 @@ namespace Ecommerce.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("OtpExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OtpHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("OtpUsed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResetToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ResetTokenExpiry")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
@@ -493,6 +516,12 @@ namespace Ecommerce.DAL.Migrations
 
             modelBuilder.Entity("Ecommerce.Models.Entities.LessonProgress", b =>
                 {
+                    b.HasOne("Ecommerce.Models.Entities.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ecommerce.Models.Entities.Lesson", "Lesson")
                         .WithMany()
                         .HasForeignKey("LessonId")
@@ -504,6 +533,8 @@ namespace Ecommerce.DAL.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Course");
 
                     b.Navigation("Lesson");
 

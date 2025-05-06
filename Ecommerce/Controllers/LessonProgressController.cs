@@ -65,7 +65,24 @@ namespace Ecommerce.Api.Controllers
             return success ? Ok(new { message = "Lesson_Progress deleted successfully" }) : NotFound("No course Found.");
         }
 
-
+        [HttpGet("student/{studentId}/course/{CourseId}")]
+        public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetCourseProgressByStudentIdAsync(int studentId,int CourseId)
+        {
+            var CourseProgress = await _service.GetCourseProgressAsync(studentId,CourseId);
+            return Ok(CourseProgress);
+        }
+        [HttpGet("student/{studentId}")]
+        public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetCoursesProgressByStudentLevelAsync(int studentId)
+        {
+            var CourseProgress = await _service.GetCoursesProgressByStudentLevelAsync(studentId);
+            return Ok(CourseProgress);
+        }
+        [HttpGet("student/{studentId}/level/{levelId}")]
+        public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetCoursesProgressByStudentAndLevelAsync(int studentId,int levelId)
+        {
+            var CourseProgress = await _service.GetCoursesProgressByStudentAndLevelAsync(studentId,levelId);
+            return Ok(CourseProgress);
+        }
 
     }
 }

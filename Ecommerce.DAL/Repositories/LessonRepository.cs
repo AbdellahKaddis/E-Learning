@@ -84,6 +84,23 @@ namespace Ecommerce.DAL.Repositories
             }
             return false;
         }
+
+        public async Task<List<LessonDto>> getCourseLessonsByCourseId(int courseId)
+        {
+             return await _context.Lesson
+               .Include(c => c.Course)
+               .Where(l=>l.CourseId == courseId)
+               .Select(lesson => new LessonDto
+               {
+                   LessonId = lesson.LessonId,
+                   titre = lesson.titre,
+                   URL = lesson.URL,
+                   Duration = lesson.Duration,
+                   CourseName = lesson.Course.CourseName,
+                   Description = lesson.Description
+               })
+               .ToListAsync();
+        }
     }
     }
 

@@ -97,5 +97,14 @@ namespace Ecommerce.Api.Controllers
                 return NotFound("Lesson not found.");
             }
         }
+
+        [HttpGet("/course/{courseId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<IEnumerable<LessonDto>>> getCourseLessonsByCourseId(int courseId)
+        {
+            var Lessons = await _service.getCourseLessonsByCourseId(courseId);
+            return Lessons.Any() ? Ok(Lessons) : NotFound("No Lesson was found.");
+        }
     }
 }

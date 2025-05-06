@@ -89,7 +89,12 @@ namespace Ecommerce.DAL.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    OtpHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OtpExpiry = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    OtpUsed = table.Column<bool>(type: "bit", nullable: true),
+                    ResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetTokenExpiry = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -295,25 +300,36 @@ namespace Ecommerce.DAL.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(type: "int", nullable: false),
                     LessonId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
                     LastSecond = table.Column<int>(type: "int", nullable: false),
+                    IsCompleted = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_lessonProgresses", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_lessonProgresses_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+
+                    table.ForeignKey(
                         name: "FK_lessonProgresses_Lesson_LessonId",
                         column: x => x.LessonId,
                         principalTable: "Lesson",
                         principalColumn: "LessonId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+
                     table.ForeignKey(
                         name: "FK_lessonProgresses_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Restrict);
+                }
+);
 
             migrationBuilder.InsertData(
                 table: "Roles",
@@ -356,6 +372,11 @@ namespace Ecommerce.DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Lesson_CourseId",
                 table: "Lesson",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_lessonProgresses_CourseId",
+                table: "lessonProgresses",
                 column: "CourseId");
 
             migrationBuilder.CreateIndex(

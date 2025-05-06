@@ -10,6 +10,8 @@ namespace Ecommerce.Models.DTOs
     {
         public int StudentId { get; set; }
         public int LessonId { get; set; }
+        public int CourseId { get; set; }
+        public bool IsCompleted { get; set; }
         public int LastSecond { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

@@ -13,7 +13,10 @@ namespace Ecommerce.Models.Entities
         public Student? Student { get; set; }
         public int LessonId { get; set; }
         public Lesson? Lesson { get; set; }
+        public int CourseId { get; set; }
+        public Course? Course { get; set; }
         public int LastSecond { get; set; }
+        public bool IsCompleted { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
 }

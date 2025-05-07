@@ -34,7 +34,8 @@ namespace Ecommerce.DAL.Repositories
                     Level = course.Level.Name,
                     ImageCourse = course.ImageCourse,
                     Category = course.Category.CategoryName,
-                    Formateur = course.User.FirstName,
+                    Formateur = course.User.LastName,
+                    FourmateurId = course.User.Id,
                     Created = course.Created,
                     Updated = course.Updated
                 }).ToListAsync();
@@ -56,7 +57,8 @@ namespace Ecommerce.DAL.Repositories
                     Level = course.Level.Name,
                     ImageCourse = course.ImageCourse,
                     Category = course.Category.CategoryName,
-                    Formateur = course.User.FirstName,
+                    Formateur = course.User.LastName,
+                    FourmateurId = course.User.Id,
                     Created = course.Created,
                     Updated = course.Updated
                 }).FirstOrDefaultAsync();

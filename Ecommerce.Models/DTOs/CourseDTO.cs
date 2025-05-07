@@ -16,6 +16,7 @@ namespace Ecommerce.Models.DTOs
         public string Level { get; set; }
         public string ImageCourse {  get; set; }
         public string Formateur { get; set; }
+        public int FourmateurId { get; set; }
         public string Category {  get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }

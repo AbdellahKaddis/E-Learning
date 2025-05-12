@@ -39,6 +39,15 @@ namespace Ecommerce.Api.Controllers
             return parent == null ? NotFound() : Ok(parent);
         }
 
+        [HttpGet("user/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ParentDTO>> GetParentByUserId(int id)
+        {
+            var parent = await _parentService.GetParentByUserIdAsync(id);
+            return parent == null ? NotFound() : Ok(parent);
+        }
+
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

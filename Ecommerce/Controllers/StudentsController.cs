@@ -38,6 +38,15 @@ namespace Ecommerce.Api.Controllers
             return student == null ? NotFound() : Ok(student);
         }
 
+        [HttpGet("user/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<StudentDTO>> GetStudentByUserId(int id)
+        {
+            var student = await _studentService.GetStudentByUserIdAsync(id);
+            return student == null ? NotFound() : Ok(student);
+        }
+
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

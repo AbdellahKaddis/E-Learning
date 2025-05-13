@@ -13,9 +13,13 @@ using QuestPDF.Infrastructure;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    .Replace("#{DB_SERVER}#", Environment.GetEnvironmentVariable("DB_SERVER") ?? "YOZOPA\\MSSQLSERVERR")
+    .Replace("#{DB_NAME}#", Environment.GetEnvironmentVariable("DB_NAME") ?? "ElearningTst1")
+    .Replace("#{DB_USER}#", Environment.GetEnvironmentVariable("DB_USER") ?? "sa")
+    .Replace("#{DB_PASSWORD}#", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "yozopa00");
 // Get the connection string from appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 
 // Configure the DbContext to use the connection string
 builder.Services.AddDbContext<AppDbContext>(options =>

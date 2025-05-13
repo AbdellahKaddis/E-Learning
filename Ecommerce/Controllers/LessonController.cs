@@ -38,16 +38,18 @@ namespace Ecommerce.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Lesson> GetLessonId(int id)
         {
-            var Lesson = _service.GetLessonId(id);
-            return Lesson == null ? NotFound() : Ok(new updateLessonDto
-            {
-
-                titre = Lesson.titre,
-                URL = Lesson.URL,
-                Duration = Lesson.Duration,
-                Description = Lesson.Description,
-                CourseId = Lesson.CourseId
-            });
+            var lesson = _service.GetLessonId(id);
+            return lesson == null
+                ? NotFound()
+                : Ok(new updateLessonDto
+                {
+                    LessonId = lesson.LessonId, // Include LessonId here
+                    titre = lesson.titre,
+                    URL = lesson.URL,
+                    Duration = lesson.Duration,
+                    Description = lesson.Description,
+                    CourseId = lesson.CourseId
+                });
         }
 
 

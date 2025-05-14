@@ -229,7 +229,6 @@ namespace Ecommerce.DAL.Repositories
 
             var courseIds = courses.Select(c => c.Id).ToList();
 
-            // Get lesson counts for each course (1 query)
             var lessonsCounts = await _context.Lesson
                 .Where(l => courseIds.Contains(l.CourseId))
                 .GroupBy(l => l.CourseId)
@@ -265,5 +264,33 @@ namespace Ecommerce.DAL.Repositories
 
             return result;
         }
+        public async Task<List<LessonWithProgressDTO>> GetLessonsWithProgressByStudentAndCourseAsync(int studentId, int courseId)
+        {
+            var lessonsWithProgress = await _context.Lesson
+                .Include(l => l.Course)
+                .Where(l => l.CourseId == courseId)
+                .GroupJoin(
+                    _context.lessonProgresses.Where(p => p.StudentId == studentId),
+                    l => l.LessonId,
+                    lp => lp.LessonId,
+                    (l, lpGroup) => new { Lesson = l, Progress = lpGroup.FirstOrDefault() }
+                )
+                .Select(lp => new LessonWithProgressDTO
+                {
+                    LessonId = lp.Lesson.LessonId,
+                    Titre = lp.Lesson.titre,
+                    URL = lp.Lesson.URL,
+                    Description = lp.Lesson.Description,
+                    Duration = lp.Lesson.Duration,
+                    CourseName = lp.Lesson.Course.CourseName, 
+
+                    LastSecond = lp.Progress != null ? lp.Progress.LastSecond : 0,
+                    IsCompleted = lp.Progress != null && lp.Progress.IsCompleted,
+                })
+                .ToListAsync();
+
+            return lessonsWithProgress;
+        }
+
     }
 }

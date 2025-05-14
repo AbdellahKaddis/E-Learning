@@ -15,6 +15,7 @@ namespace Ecommerce.Api.Controllers
         {
             _service = service;
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetAllLessonProgressAsync()
         {
@@ -33,7 +34,7 @@ namespace Ecommerce.Api.Controllers
         public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetLessonProgressByStudentIdAndCourseIdAsync(int studentId, int courseId)
         {
             var lessonProgress = await _service.GetLessonProgressByStudentIdAndCourseIdAsync(studentId, courseId);
-            return lessonProgress.Any() ? Ok(lessonProgress) : NotFound("No lesson progress found for this student.");
+            return lessonProgress.Any() ? Ok(lessonProgress) : NotFound("No lesson progress found for this student and course.");
         }
 
         [HttpPost]
@@ -64,31 +65,40 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteLessonProgressAsync(int id)
         {
-            var success = await _service.DeleteLessonProgressAsync(id);
-            return success ? Ok(new { message = "Lesson_Progress deleted successfully" }) : NotFound("No course Found.");
+            var deleted = await _service.DeleteLessonProgressAsync(id);
+            if (!deleted)
+                return NotFound("Lesson progress not found.");
+
+            return Ok(new { message = "Lesson progress deleted successfully" });
         }
 
-        [HttpGet("student/{studentId}/course/{CourseId}")]
-        public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetCourseProgressByStudentIdAsync(int studentId,int CourseId)
+        [HttpGet("CourseProgress/{studentId}/{courseId}")]
+        public async Task<IActionResult> GetCourseProgressAsync(int studentId, int courseId)
         {
-            var CourseProgress = await _service.GetCourseProgressAsync(studentId,CourseId);
-            return Ok(CourseProgress);
+            var result = await _service.GetCourseProgressAsync(studentId, courseId);
+            return Ok(result);
         }
-        [HttpGet("student/{studentId}")]
-        public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetCoursesProgressByStudentLevelAsync(int studentId)
+
+        [HttpGet("CoursesProgressByLevel/{studentId}")]
+        public async Task<IActionResult> GetCoursesProgressByStudentLevelAsync(int studentId)
         {
-            var CourseProgress = await _service.GetCoursesProgressByStudentLevelAsync(studentId);
-            return Ok(CourseProgress);
+            var result = await _service.GetCoursesProgressByStudentLevelAsync(studentId);
+            return Ok(result);
         }
-        [HttpGet("student/{studentId}/level/{levelId}")]
-        public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetCoursesProgressByStudentAndLevelAsync(int studentId,int levelId)
+
+        [HttpGet("CoursesProgressByStudentAndLevel/{studentId}/{levelId}")]
+        public async Task<IActionResult> GetCoursesProgressByStudentAndLevelAsync(int studentId, int levelId)
         {
-            var CourseProgress = await _service.GetCoursesProgressByStudentAndLevelAsync(studentId,levelId);
-            return Ok(CourseProgress);
+            var result = await _service.GetCoursesProgressByStudentAndLevelAsync(studentId, levelId);
+            return Ok(result);
+        }
+        [HttpGet("LessonsWithProgress/{studentId}/{courseId}")]
+        public async Task<ActionResult<IEnumerable<LessonWithProgressDTO>>> GetLessonsWithProgressByStudentAndCourseAsync(int studentId, int courseId)
+        {
+            var result = await _service.GetLessonsWithProgressByStudentAndCourseAsync(studentId, courseId);
+            return result.Any() ? Ok(result) : NotFound("No lessons found for the specified course or student.");
         }
 
     }

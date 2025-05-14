@@ -52,6 +52,11 @@ namespace Ecommerce.BLL.Services
         {
             return await _repo.GetCoursesProgressByStudentAndLevelAsync(studentId,LevelId);
         }
+        public async Task<List<LessonWithProgressDTO>> GetLessonsWithProgressByStudentAndCourseAsync(int studentId, int courseId)
+        {
+            return await _repo.GetLessonsWithProgressByStudentAndCourseAsync(studentId, courseId);
+        }
+
 
 
 

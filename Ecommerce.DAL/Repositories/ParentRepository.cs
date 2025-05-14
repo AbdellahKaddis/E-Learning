@@ -62,6 +62,29 @@ namespace Ecommerce.DAL.Repositories
                 })
                 .FirstOrDefaultAsync();
         }
+        public async Task<ParentDTO?> GetParentByUserIdAsync(int userId)
+        {
+            return await _context.Parents
+                .Include(p => p.User)
+                .Where(p => p.UserId == userId)
+                .Select(p => new ParentDTO
+                {
+                    Id = p.Id,
+                    Address = p.Address,
+                    Cin = p.Cin,
+                    Telephone = p.Telephone,
+                    UserId = p.UserId,
+                    User = new UserDTO
+                    {
+                        Id = p.User.Id,
+                        FirstName = p.User.FirstName,
+                        LastName = p.User.LastName,
+                        Email = p.User.Email,
+                        RoleName = p.User.Role.Name
+                    }
+                })
+                .FirstOrDefaultAsync();
+        }
 
         public async Task<int> AddParentAsync(CreateParentDTO dto)
         {

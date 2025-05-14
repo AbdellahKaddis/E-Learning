@@ -516,7 +516,7 @@ namespace Ecommerce.DAL.Migrations
                     b.HasOne("Ecommerce.Models.Entities.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Ecommerce.Models.Entities.Lesson", "Lesson")

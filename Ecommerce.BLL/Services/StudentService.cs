@@ -29,7 +29,7 @@ namespace Ecommerce.BLL.Services
         public async Task<List<StudentDTO>> GetAllStudentsAsync() => await _studentRepo.GetAllStudentsAsync();
 
         public async Task<StudentDTO?> GetStudentByIdAsync(int id) => await _studentRepo.GetStudentByIdAsync(id);
-
+        public async Task<StudentDTO?> GetStudentByUserIdAsync(int userId) => await _studentRepo.GetStudentByUserIdAsync(userId);
         public async Task<StudentDTO> AddStudentAsync(CreateStudentDTO dto)
         {
             int studentId = await _studentRepo.AddStudentAsync(dto);
@@ -56,7 +56,7 @@ namespace Ecommerce.BLL.Services
             return BitConverter.ToString(hash)[..6].Replace("-", "");
         }
 
-        private static string GenerateSecurePassword()
+        public static string GenerateSecurePassword()
         {
             const int _passwordLength = 12;
             const string validChars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#$%&*?";

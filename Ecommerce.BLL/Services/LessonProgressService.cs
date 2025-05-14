@@ -28,6 +28,9 @@ namespace Ecommerce.BLL.Services
             return await _repo.GetLessonProgressByStudentIdAsync(studentId);
         }
 
+        public async Task<List<LessonProgressDTO>> GetLessonProgressByStudentIdAndCourseIdAsync(int studentId, int courseId)
+            => await _repo.GetLessonProgressByStudentIdAndCourseIdAsync(studentId,courseId);
+
         public async Task<bool> UpdateLessonProgressAsync(int studentId, int lessonId, UpdateLessonProgressDTO les)
         {
             return await _repo.UpdateLessonProgressAsync(studentId, lessonId, les);

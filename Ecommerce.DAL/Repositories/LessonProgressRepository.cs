@@ -57,6 +57,28 @@ namespace Ecommerce.DAL.Repositories
                 })
                 .ToListAsync();
         }
+        public async Task<List<LessonProgressDTO>> GetLessonProgressByStudentIdAndCourseIdAsync(int studentId,int courseId)
+        {
+            return await _context.lessonProgresses
+                .Include(s => s.Student)
+                .Include(l => l.Lesson)
+                .Where(lesPro => lesPro.StudentId == studentId && lesPro.CourseId == courseId)
+                .Select(lesPro => new LessonProgressDTO
+                {
+                    Id = lesPro.Id,
+                    StudentId = lesPro.StudentId,
+                    StudentName = lesPro.Student.User.FirstName,
+                    LessonId = lesPro.LessonId,
+                    LessonName = lesPro.Lesson.titre,
+                    CourseId = lesPro.CourseId,
+                    CourseName = lesPro.Course.CourseName,
+                    IsCompleted = lesPro.IsCompleted,
+                    LastSecond = lesPro.LastSecond,
+                    UpdatedAt = lesPro.UpdatedAt
+                })
+                .ToListAsync();
+        }
+
 
         public async Task<bool> AddOrUpdateLessonProgressAsync(CreateLessonProgressDTO les)
         {

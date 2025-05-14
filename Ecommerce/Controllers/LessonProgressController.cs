@@ -29,6 +29,13 @@ namespace Ecommerce.Api.Controllers
             return lessonProgress.Any() ? Ok(lessonProgress) : NotFound("No lesson progress found for this student.");
         }
 
+        [HttpGet("LessonProgressByStudentIdAndCourseId/{studentId}/{courseId}")]
+        public async Task<ActionResult<IEnumerable<LessonProgressDTO>>> GetLessonProgressByStudentIdAndCourseIdAsync(int studentId, int courseId)
+        {
+            var lessonProgress = await _service.GetLessonProgressByStudentIdAndCourseIdAsync(studentId, courseId);
+            return lessonProgress.Any() ? Ok(lessonProgress) : NotFound("No lesson progress found for this student.");
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddCourseAsync([FromBody] CreateLessonProgressDTO les)
         {

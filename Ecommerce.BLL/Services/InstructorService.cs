@@ -118,5 +118,14 @@ namespace Ecommerce.BLL.Services
             return false;
         }
 
+        public async Task CreateInstructorOnlyAsync(CreateInstructorDTO dto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateInstructorWithUserAsync(int id, UpdateInstructorWithUserDTO dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

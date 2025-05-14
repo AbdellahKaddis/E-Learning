@@ -37,7 +37,7 @@ namespace Ecommerce.Api.Controllers
             return instructor == null ? NotFound() : Ok(instructor);
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<InstructorDTO>> AddInstructor(CreateUserWithInstructorDTO dto)

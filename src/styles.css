@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+.content-wrapper {
+    margin-left: 0; /* Pas de marge car la sidebar est en overlay */
+    transition: none; /* Pas de transition nécessaire */
+  }
+  
+  .main-content {
+    padding: 20px;
+  }

@@ -1,0 +1,31 @@
+<div class="sidebar" [class.collapsed]="collapsed">
+  <div class="top-section">
+    <div class="logo-container">
+      <span class="logo-text" *ngIf="!collapsed">
+        <img src="assets/logo.png" alt="Logo" class="logo-img">
+      </span>
+    </div>
+
+    <button class="toggle-btn" (click)="toggleSidebar()" aria-label="Toggle sidebar">
+      <i class="fa" [ngClass]="collapsed ? 'fa-chevron-right' : 'fa-chevron-left'"></i>
+    </button>
+  </div>
+
+  <ul class="nav-items">
+    <li>
+      <a routerLink="/instructor-profile" routerLinkActive="active">
+        <i class="fa fa-user"></i>
+        <span class="nav-text" *ngIf="!collapsed">Profil</span>
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/emplois" routerLinkActive="active">
+        <i class="fa fa-calendar-alt"></i>
+        <span class="nav-text" *ngIf="!collapsed">Emplois</span>
+      </a>
+    </li>
+
+   
+  </ul>
+</div>

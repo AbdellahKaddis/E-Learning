@@ -57,6 +57,28 @@ namespace Ecommerce.DAL.Repositories
                 })
                 .ToListAsync();
         }
+        public async Task<List<LessonProgressDTO>> GetLessonProgressByStudentIdAndCourseIdAsync(int studentId,int courseId)
+        {
+            return await _context.lessonProgresses
+                .Include(s => s.Student)
+                .Include(l => l.Lesson)
+                .Where(lesPro => lesPro.StudentId == studentId && lesPro.CourseId == courseId)
+                .Select(lesPro => new LessonProgressDTO
+                {
+                    Id = lesPro.Id,
+                    StudentId = lesPro.StudentId,
+                    StudentName = lesPro.Student.User.FirstName,
+                    LessonId = lesPro.LessonId,
+                    LessonName = lesPro.Lesson.titre,
+                    CourseId = lesPro.CourseId,
+                    CourseName = lesPro.Course.CourseName,
+                    IsCompleted = lesPro.IsCompleted,
+                    LastSecond = lesPro.LastSecond,
+                    UpdatedAt = lesPro.UpdatedAt
+                })
+                .ToListAsync();
+        }
+
 
         public async Task<bool> AddOrUpdateLessonProgressAsync(CreateLessonProgressDTO les)
         {
@@ -207,7 +229,6 @@ namespace Ecommerce.DAL.Repositories
 
             var courseIds = courses.Select(c => c.Id).ToList();
 
-            // Get lesson counts for each course (1 query)
             var lessonsCounts = await _context.Lesson
                 .Where(l => courseIds.Contains(l.CourseId))
                 .GroupBy(l => l.CourseId)
@@ -243,5 +264,33 @@ namespace Ecommerce.DAL.Repositories
 
             return result;
         }
+        public async Task<List<LessonWithProgressDTO>> GetLessonsWithProgressByStudentAndCourseAsync(int studentId, int courseId)
+        {
+            var lessonsWithProgress = await _context.Lesson
+                .Include(l => l.Course)
+                .Where(l => l.CourseId == courseId)
+                .GroupJoin(
+                    _context.lessonProgresses.Where(p => p.StudentId == studentId),
+                    l => l.LessonId,
+                    lp => lp.LessonId,
+                    (l, lpGroup) => new { Lesson = l, Progress = lpGroup.FirstOrDefault() }
+                )
+                .Select(lp => new LessonWithProgressDTO
+                {
+                    LessonId = lp.Lesson.LessonId,
+                    Titre = lp.Lesson.titre,
+                    URL = lp.Lesson.URL,
+                    Description = lp.Lesson.Description,
+                    Duration = lp.Lesson.Duration,
+                    CourseName = lp.Lesson.Course.CourseName, 
+
+                    LastSecond = lp.Progress != null ? lp.Progress.LastSecond : 0,
+                    IsCompleted = lp.Progress != null && lp.Progress.IsCompleted,
+                })
+                .ToListAsync();
+
+            return lessonsWithProgress;
+        }
+
     }
 }

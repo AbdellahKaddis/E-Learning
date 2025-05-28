@@ -14,10 +14,12 @@ namespace Ecommerce.Models.DTOs
         public string CourseDescription { get; set; }
         public string Duration { get; set; }
         public string Level { get; set; }
+        public int LevelId { get; set; }
         public string ImageCourse {  get; set; }
         public string Formateur { get; set; }
         public int FourmateurId { get; set; }
         public string Category {  get; set; }
+        public int CategoryId {  get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 

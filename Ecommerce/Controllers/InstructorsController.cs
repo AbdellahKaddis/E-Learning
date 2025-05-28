@@ -31,13 +31,24 @@ namespace Ecommerce.Api.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ParentDTO>> GetInstructorById(int id)
+        public async Task<ActionResult<InstructorDTO>> GetInstructorById(int id)
         {
             var instructor = await _instructorService.GetInstructorByIdAsync(id);
             return instructor == null ? NotFound() : Ok(instructor);
         }
 
-        [HttpPost]
+
+        [HttpGet("user/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<InstructorDTO>> GetInstructorByUserId(int id)
+        {
+            var instructor = await _instructorService.GetInstructorByUserIdAsync(id);
+            return instructor == null ? NotFound() : Ok(instructor);
+        }
+
+        [HttpPost("register")]
+
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<InstructorDTO>> AddInstructor(CreateUserWithInstructorDTO dto)

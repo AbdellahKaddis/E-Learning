@@ -24,22 +24,25 @@ namespace Ecommerce.DAL.Repositories
             return await _context.Courses
                 .Include(c => c.Category)
                 .Include(c => c.User)
-                .Include(c=>c.Level)
+                .Include(c => c.Level)
                 .Select(course => new CourseDTO
                 {
                     Id = course.Id,
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
                     Duration = course.Duration,
-                    Level = course.Level.Name,
+                    Level = course.Level != null ? course.Level.Name : "Non défini",
+                    LevelId = course.Level != null ? course.Level.Id : 0,
                     ImageCourse = course.ImageCourse,
-                    Category = course.Category.CategoryName,
-                    Formateur = course.User.LastName,
-                    FourmateurId = course.User.Id,
+                    Category = course.Category != null ? course.Category.CategoryName : "Non défini",
+                    CategoryId = course.Category != null ? course.Category.Id : 0,
+                    Formateur = course.User != null ? course.User.LastName : "Non défini",
+                    FourmateurId = course.User != null ? course.User.Id : 0,
                     Created = course.Created,
                     Updated = course.Updated
                 }).ToListAsync();
         }
+
 
         public async Task<CourseDTO> GetCourseByIdAsync(int id)
         {
@@ -55,8 +58,10 @@ namespace Ecommerce.DAL.Repositories
                     CourseDescription = course.CourseDescription,
                     Duration = course.Duration,
                     Level = course.Level.Name,
+                    LevelId = course.Level.Id,
                     ImageCourse = course.ImageCourse,
                     Category = course.Category.CategoryName,
+                    CategoryId = course.Category.Id,
                     Formateur = course.User.LastName,
                     FourmateurId = course.User.Id,
                     Created = course.Created,

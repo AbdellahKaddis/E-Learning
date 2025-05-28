@@ -104,6 +104,49 @@ namespace Ecommerce.DAL.Repositories
                 }).FirstOrDefaultAsync();
         }
 
+        public async Task<StudentDTO?> GetStudentByUserIdAsync(int userId)
+        {
+            return await _context.Students
+                .Include(s => s.User)
+                .Include(s => s.Level)
+                 .Include(s => s.Classe)
+                .Include(s => s.Parent)
+                    .ThenInclude(p => p.User)
+                .Where(s => s.UserId == userId)
+                .Select(s => new StudentDTO
+                {
+                    Id = s.Id,
+                    DateOfBirth = s.DateOfBirth,
+                    ParentId = s.ParentId,
+                    User = new UserDTO
+                    {
+                        Id = s.User.Id,
+                        FirstName = s.User.FirstName,
+                        LastName = s.User.LastName,
+                        Email = s.User.Email,
+                        RoleName = s.User.Role.Name
+                    },
+                    Parent = new ParentDTO
+                    {
+                        Id = s.Parent.Id,
+                        Address = s.Parent.Address,
+                        Telephone = s.Parent.Telephone,
+                        Cin = s.Parent.Cin,
+                        UserId = s.Parent.UserId,
+                        User = new UserDTO
+                        {
+                            Id = s.Parent.User.Id,
+                            FirstName = s.Parent.User.FirstName,
+                            LastName = s.Parent.User.LastName,
+                            Email = s.Parent.User.Email,
+                            RoleName = s.Parent.User.Role.Name
+                        }
+                    },
+                    LevelName = s.Level.Name,
+                    ClassName = s.Classe.Name
+                }).FirstOrDefaultAsync();
+        }
+
         public async Task<int> AddStudentAsync(CreateStudentDTO dto)
         {
             var student = new Student

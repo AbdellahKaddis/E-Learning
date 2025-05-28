@@ -63,6 +63,29 @@ namespace Ecommerce.DAL.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<InstructorDTO?> GetInstructorByUserIdAsync(int userId)
+        {
+            return await _context.Instructors
+                .Include(i => i.User)
+                .Where(i => i.UserId == userId)
+                .Select(i => new InstructorDTO
+                {
+                    Id = i.Id,
+                    Address = i.Address,
+                    Cin = i.Cin,
+                    Telephone = i.Telephone,
+                    Specialite = i.Specialite,
+                    User = new UserDTO
+                    {
+                        Id = i.User.Id,
+                        FirstName = i.User.FirstName,
+                        LastName = i.User.LastName,
+                        Email = i.User.Email,
+                        RoleName = i.User.Role.Name
+                    }
+                })
+                .FirstOrDefaultAsync();
+        }
         public async Task<int> AddInstructorAsync(CreateInstructorDTO dto)
         {
             var instructor = new Instructor

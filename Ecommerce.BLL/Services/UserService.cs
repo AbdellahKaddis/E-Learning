@@ -36,7 +36,7 @@ namespace Ecommerce.BLL.Services
             if (!await _repo.IsRoleExistsAsync(dto.RoleId))
                 throw new ArgumentException($"RoleId {dto.RoleId} does not exist.");
 
-            if(dto.RoleId != 4)
+            if(dto.RoleId == 1)
                 await _emailService.SendEmailAsync(dto.Email, $"{dto.FirstName} {dto.LastName}", isBodyHtml: true);
 
             dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password);

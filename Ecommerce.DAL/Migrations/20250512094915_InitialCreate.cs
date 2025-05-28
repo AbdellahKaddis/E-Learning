@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Ecommerce.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -312,24 +312,20 @@ namespace Ecommerce.DAL.Migrations
                         name: "FK_lessonProgresses_Courses_CourseId",
                         column: x => x.CourseId,
                         principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_lessonProgresses_Lesson_LessonId",
                         column: x => x.LessonId,
                         principalTable: "Lesson",
                         principalColumn: "LessonId",
-                        onDelete: ReferentialAction.Restrict);
-
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_lessonProgresses_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                }
-);
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.InsertData(
                 table: "Roles",

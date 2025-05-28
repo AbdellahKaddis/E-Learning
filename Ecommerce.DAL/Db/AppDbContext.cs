@@ -94,6 +94,14 @@ namespace Ecommerce.DAL.Db
             modelBuilder.Entity<Parent>()
 .HasIndex(p => p.Cin)
 .IsUnique();
+
+            modelBuilder.Entity<LessonProgress>(entity =>
+            {
+                entity.HasOne(lp => lp.Course)
+                    .WithMany()
+                    .HasForeignKey(lp => lp.CourseId)
+                    .OnDelete(DeleteBehavior.NoAction); // Change to NoAction
+            });
         }
     }
 }

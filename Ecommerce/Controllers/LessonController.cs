@@ -41,6 +41,7 @@ namespace Ecommerce.Api.Controllers
             var Lesson = _service.GetLessonId(id);
             return Lesson == null ? NotFound() : Ok(new updateLessonDto
             {
+                LessonId = Lesson.LessonId, // Include LessonId here
 
                 titre = Lesson.titre,
                 URL = Lesson.URL,
@@ -81,10 +82,9 @@ namespace Ecommerce.Api.Controllers
 
         }
 
-
-        [HttpDelete("DeleteLesson")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Lesson> DeleteLesson(int id)
         {
             var lessonDeleted = _service.DeleteLesson(id);
